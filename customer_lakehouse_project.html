@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Data Platform | Technical Capability Demonstration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1419;
+            color: #e1e8ed;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Disclaimer Banner */
+        .disclaimer {
+            background: #2d3748;
+            border-left: 4px solid #4299e1;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .disclaimer-text {
+            font-size: 0.9rem;
+            color: #cbd5e0;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1f29;
+            border-bottom: 1px solid #2d3748;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4299e1;
+        }
+
+        .capability-badge {
+            background: #2d3748;
+            color: #4299e1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #4299e1;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #1a1f29 0%, #0f1419 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f7fafc;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.2rem;
+            color: #4299e1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-box {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #68d391;
+        }
+
+        .use-case-title {
+            color: #68d391;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-meta {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            color: #a0aec0;
+        }
+
+        .meta-value {
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        /* Capabilities */
+        .capabilities {
+            padding: 3rem 0;
+            background: #1a1f29;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .capability-card {
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .capability-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4299e1;
+            display: block;
+        }
+
+        .capability-label {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #f7fafc;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-button.active {
+            background: #4299e1;
+            color: #f7fafc;
+            border-color: #4299e1;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            color: #f7fafc;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            color: #a0aec0;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #4299e1;
+            color: #f7fafc;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #3182ce;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #4299e1;
+            color: #4299e1;
+        }
+
+        .btn-secondary:hover {
+            background: #4299e1;
+            color: #f7fafc;
+        }
+
+        /* Architecture */
+        .architecture-diagram {
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            background: #1a1f29;
+            border: 1px solid #4299e1;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4299e1;
+            font-size: 1.2rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-detail {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-category {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .tech-category h4 {
+            color: #4299e1;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: #2d3748;
+            color: #cbd5e0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Qualification Form */
+        .qualification {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            color: #e1e8ed;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* File Drop Zone */
+        .file-drop-zone {
+            border: 2px dashed #4299e1;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(66, 153, 225, 0.05);
+        }
+
+        .file-drop-zone:hover {
+            border-color: #3182ce;
+            background: rgba(66, 153, 225, 0.1);
+        }
+
+        .file-drop-zone.dragover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .file-drop-content {
+            color: #4299e1;
+        }
+
+        .file-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-item button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Downloads */
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .download-card {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .download-title {
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .download-description {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* PDF Viewer */
+        .pdf-viewer {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            background: #f7fafc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .pipeline-flow {
+                flex-direction: column;
+            }
+            
+            .pipeline-step::after {
+                display: none;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: #2d3748;
+            border-left: 4px solid #f6ad55;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-text {
+            color: #f6ad55;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="project-title">Customer Data Platform</div>
+                <div class="capability-badge">Technical Capability Demo</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="disclaimer">
+            <div class="disclaimer-text">
+                <strong>Note:</strong> This is a technical capability demonstration showing the type of solution I can build for your business. 
+                All data shown is simulated for privacy and demonstration purposes. Real client projects remain confidential under NDAs.
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>Customer Data Platform</h1>
+                    <div class="subtitle">Azure Databricks • Delta Lake • Real-time Analytics</div>
+                    <p>
+                        A comprehensive data engineering solution that unifies customer data from multiple touchpoints 
+                        into a single source of truth. This demonstration shows the technical architecture and capabilities 
+                        I can deliver for retail, e-commerce, or any customer-centric business.
+                    </p>
+                    
+                    <div class="use-case-box">
+                        <div class="use-case-title">Common Business Scenario</div>
+                        <p style="margin-bottom: 0;">
+                            Customer data scattered across POS systems, e-commerce platforms, CRM, email marketing tools, 
+                            and support systems. Manual reporting processes, incomplete customer profiles, and limited 
+                            real-time insights hampering business decisions.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="showTab('overview'); document.getElementById('demos').scrollIntoView();">Explore Solution</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('qualification').scrollIntoView();">Discuss Your Project</button>
+                    </div>
+                </div>
+                
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Solution Type</span>
+                        <span class="meta-value">Data Lakehouse</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Architecture</span>
+                        <span class="meta-value">Medallion (Bronze/Silver/Gold)</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Processing</span>
+                        <span class="meta-value">Real-time + Batch</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Typical Data Volume</span>
+                        <span class="meta-value">100GB - 10TB daily</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Implementation</span>
+                        <span class="meta-value">3-8 months</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Deployment</span>
+                        <span class="meta-value">Cloud-native Azure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="capabilities">
+        <div class="container">
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <span class="capability-number">3-15</span>
+                    <div class="capability-label">Data Sources Integration</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">50GB-1TB</span>
+                    <div class="capability-label">Daily Processing Range</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">Real-time</span>
+                    <div class="capability-label">Streaming Analytics</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">60-85%</span>
+                    <div class="capability-label">Typical Time Savings</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">95%+</span>
+                    <div class="capability-label">Data Quality Achievement</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">Self-Service</span>
+                    <div class="capability-label">Business User Analytics</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="overview" class="section">
+        <div class="container">
+            <h2 class="section-title">Solution Overview</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Technical Approach</h3>
+                    <p>
+                        Modern data lakehouse architecture using Azure Databricks and Delta Lake. 
+                        Implements medallion pattern (Bronze → Silver → Gold) for data quality and governance. 
+                        Supports both real-time streaming and batch processing patterns.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Business Impact</h3>
+                    <p>
+                        Eliminates data silos and manual processes. Enables 360° customer view, 
+                        real-time reporting, and advanced analytics. Typical clients see 60-85% reduction 
+                        in reporting time and improved decision-making speed.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Key Features</h3>
+                    <p>
+                        Automated data quality checks, real-time customer scoring, self-service analytics, 
+                        API endpoints for applications, compliance frameworks (GDPR ready), 
+                        and scalable cloud infrastructure.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Delivery Method</h3>
+                    <p>
+                        Agile implementation with incremental value delivery. Infrastructure-as-code, 
+                        comprehensive documentation, team training, and ongoing support options. 
+                        Full source code and deployment scripts included.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Architecture</h2>
+            <div class="architecture-diagram">
+                <div class="pipeline-flow">
+                    <div class="pipeline-step">
+                        <div class="step-title">Data Sources</div>
+                        <div class="step-detail">CRM, POS, Web, Mobile, APIs</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Ingestion</div>
+                        <div class="step-detail">Event Hubs, Data Factory</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Bronze Layer</div>
+                        <div class="step-detail">Raw Data Storage</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Silver Layer</div>
+                        <div class="step-detail">Cleaned & Validated</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Gold Layer</div>
+                        <div class="step-detail">Business-Ready Data</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Consumption</div>
+                        <div class="step-detail">Dashboards, APIs, ML</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>Data Platform</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Azure Databricks</span>
+                        <span class="tech-tag">Delta Lake</span>
+                        <span class="tech-tag">Azure Data Lake Gen2</span>
+                        <span class="tech-tag">Event Hubs</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>Processing & Transformation</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Apache Spark</span>
+                        <span class="tech-tag">PySpark</span>
+                        <span class="tech-tag">SQL</span>
+                        <span class="tech-tag">Azure Data Factory</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>Analytics & Visualization</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">REST APIs</span>
+                        <span class="tech-tag">Azure Functions</span>
+                        <span class="tech-tag">Synapse Analytics</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>DevOps & Governance</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Azure DevOps</span>
+                        <span class="tech-tag">Terraform</span>
+                        <span class="tech-tag">Azure Monitor</span>
+                        <span class="tech-tag">Unity Catalog</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demos" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Demonstrations</h2>
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('overview')">Solution Overview</button>
+                    <button class="tab-button" onclick="showTab('pipeline')">Data Pipeline</button>
+                    <button class="tab-button" onclick="showTab('analytics')">Analytics Demo</button>
+                </div>
+                
+                <div id="overview" class="tab-content active">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Customer Analytics Dashboard</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Interactive demonstration of real-time customer analytics capabilities. 
+                        Shows typical KPIs and insights available through the platform.
+                    </p>
+                    <div class="demo-grid">
+                        <div>
+                            <h4 style="color: #4299e1; margin-bottom: 1rem;">Customer Activity Trends</h4>
+                            <div class="chart-container">
+                                <canvas id="customersChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="color: #4299e1; margin-bottom: 1rem;">Revenue Distribution</h4>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="refreshCharts()">Simulate Data Refresh</button>
+                        <button class="btn btn-secondary" onclick="exportSampleData()">Download Sample Report</button>
+                    </div>
+                </div>
+
+                <div id="pipeline" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Data Pipeline Health Monitor</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Real-time monitoring capabilities showing data flow health, processing rates, and system status.
+                    </p>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3 style="color: #68d391;">Bronze Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Processing Rate: Variable based on source volume<br>
+                            Data Quality: Raw ingestion with schema validation<br>
+                            Latency: Near real-time (< 5 minutes)</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Silver Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Data Cleansing: Automated validation rules<br>
+                            Deduplication: Identity resolution algorithms<br>
+                            Quality Score: Configurable thresholds</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Gold Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Business Logic: Customer 360° aggregations<br>
+                            Update Frequency: Configurable (real-time to hourly)<br>
+                            API Availability: 99%+ uptime SLA</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Consumption Layer</h3>
+                            <p>✅ Operational<br>
+                            Dashboard Response: Sub-second queries<br>
+                            API Performance: Typically < 200ms<br>
+                            Concurrent Users: Scales automatically</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analytics" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Customer Profile Analytics</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Demonstration of unified customer view capabilities with sample data patterns.
+                    </p>
+                    <div style="margin-bottom: 1.5rem;">
+                        <button class="btn" onclick="loadSampleProfile()">Generate Sample Customer Profile</button>
+                    </div>
+                    <div id="customerProfile" style="background: #0f1419; padding: 1.5rem; border-radius: 8px; border: 1px solid #2d3748;">
+                        <p style="color: #a0aec0; text-align: center;">Click "Generate Sample Customer Profile" to see unified customer data view</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="qualification" class="section">
+        <div class="container">
+            <h2 class="section-title">Project Discussion</h2>
+            <div class="highlight-box">
+                <div class="highlight-text">Interested in a similar solution for your business?</div>
+                <p style="margin-bottom: 0; color: #a0aec0;">
+                    Let's discuss your specific requirements, data sources, and business objectives. 
+                    This helps me propose the right technical approach and provide accurate timeline and cost estimates.
+                </p>
+            </div>
+            
+            <form class="qualification" onsubmit="handleQualification(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company/Organization</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry/Business Type</label>
+                        <select class="form-select" required>
+                            <option value="">Select Industry</option>
+                            <option value="retail">Retail/E-commerce</option>
+                            <option value="finance">Financial Services</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="technology">Technology</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Approximate Data Volume (daily)</label>
+                        <select class="form-select" required>
+                            <option value="">Select Volume</option>
+                            <option value="small">< 10GB</option>
+                            <option value="medium">10GB - 1TB</option>
+                            <option value="large">1TB - 10TB</option>
+                            <option value="enterprise">10TB+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Number of Data Sources</label>
+                        <select class="form-select" required>
+                            <option value="">Select Range</option>
+                            <option value="few">2-5 sources</option>
+                            <option value="several">6-10 sources</option>
+                            <option value="many">11-20 sources</option>
+                            <option value="complex">20+ sources</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Current Data Challenges & Requirements</label>
+                    <textarea class="form-textarea" placeholder="Describe your current data situation, main pain points, and what you're looking to achieve..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Share Relevant Documents (Optional)</label>
+                    <div class="file-drop-zone" id="fileDropZone">
+                        <div class="file-drop-content">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📁</div>
+                            <p>Drop files here or click to upload</p>
+                            <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 0.5rem;">
+                                Current architecture diagrams, data samples, requirements docs
+                            </p>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xlsx,.png,.jpg,.jpeg" style="display: none;">
+                        <div id="fileList" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Project Timeline</label>
+                        <select class="form-select" required>
+                            <option value="">Select Timeline</option>
+                            <option value="urgent">ASAP (1-2 months)</option>
+                            <option value="soon">3-6 months</option>
+                            <option value="planned">6-12 months</option>
+                            <option value="exploring">Just exploring</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Range (USD)</label>
+                        <select class="form-select" required>
+                            <option value="">Select Range</option>
+                            <option value="small">$10K - $50K</option>
+                            <option value="medium">$50K - $150K</option>
+                            <option value="large">$150K - $500K</option>
+                            <option value="enterprise">$500K+</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">
+                    Submit Project Inquiry
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section id="resources" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Documentation</h2>
+            <p class="section-subtitle">
+                Comprehensive documentation and implementation guides for building similar data platforms.
+            </p>
+            <div class="downloads-grid">
+                <div class="download-card">
+                    <div class="download-title">Solution Overview</div>
+                    <div class="download-description">
+                        Technical overview document outlining the customer data platform 
+                        architecture, key features, and implementation approach.
+                    </div>
+                    <button class="btn" onclick="downloadSolutionOverview()">Download Overview</button>
+                </div>
+                <div class="download-card">
+                    <div class="download-title">Architecture Diagram</div>
+                    <div class="download-description">
+                        High-level system architecture diagram showing data flow, 
+                        processing layers, and integration patterns.
+                    </div>
+                    <button class="btn" onclick="downloadArchitectureDiagram()">Download Diagram</button>
+                </div>
+                <div class="download-card">
+                    <div class="download-title">Sample Data Report</div>
+                    <div class="download-description">
+                        Example analytics report with sample customer insights, 
+                        KPIs, and dashboard visualizations.
+                    </div>
+                    <button class="btn" onclick="downloadSampleReport()">Download Report</button>
+                </div>
+                <div class="download-card">
+                    <div class="download-title">ROI Calculator</div>
+                    <div class="download-description">
+                        Excel template for calculating potential ROI based on 
+                        your data volumes, team size, and current processes.
+                    </div>
+                    <button class="btn" onclick="downloadROICalculator()">Download Calculator</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Tab functionality
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Charts
+        let customersChart, revenueChart;
+
+        function initCharts() {
+            // Customer Activity Chart
+            const customersCtx = document.getElementById('customersChart').getContext('2d');
+            customersChart = new Chart(customersCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Active Customers (Sample Data)',
+                        data: [12500, 13200, 12800, 14100, 13700, 14500],
+                        borderColor: '#4299e1',
+                        backgroundColor: 'rgba(66, 153, 225, 0.1)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#a0aec0' },
+                            grid: { color: '#2d3748' }
+                        },
+                        y: { 
+                            ticks: { color: '#a0aec0' },
+                            grid: { color: '#2d3748' }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Online Store', 'Physical Stores', 'Mobile App', 'Partners'],
+                    datasets: [{
+                        data: [42, 31, 18, 9],
+                        backgroundColor: ['#4299e1', '#68d391', '#f6ad55', '#9f7aea'],
+                        borderWidth: 2,
+                        borderColor: '#1a1f29'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshCharts() {
+            const btn = event.target;
+            btn.textContent = 'Refreshing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // Update with new sample data
+                customersChart.data.datasets[0].data = [
+                    12500 + Math.floor(Math.random() * 2000) - 1000,
+                    13200 + Math.floor(Math.random() * 2000) - 1000,
+                    12800 + Math.floor(Math.random() * 2000) - 1000,
+                    14100 + Math.floor(Math.random() * 2000) - 1000,
+                    13700 + Math.floor(Math.random() * 2000) - 1000,
+                    14500 + Math.floor(Math.random() * 2000) - 1000
+                ];
+                customersChart.update();
+                
+                // Update revenue chart
+                const total = 100;
+                const online = 35 + Math.floor(Math.random() * 20);
+                const physical = 25 + Math.floor(Math.random() * 15);
+                const mobile = 15 + Math.floor(Math.random() * 15);
+                const partners = total - online - physical - mobile;
+                
+                revenueChart.data.datasets[0].data = [online, physical, mobile, partners];
+                revenueChart.update();
+                
+                btn.textContent = 'Simulate Data Refresh';
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        function exportSampleData() {
+            const csvContent = "Metric,Value\nActive Customers,14500\nRevenue Growth,12.3%\nCustomer Satisfaction,4.2/5\nData Quality Score,98.7%";
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sample_analytics_report.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function loadSampleProfile() {
+            const profiles = [
+                {
+                    id: 'DEMO_001',
+                    name: 'Sample Customer A',
+                    tier: 'Gold',
+                    totalSpent: '$3,240',
+                    lastActivity: '2 days ago',
+                    preferredChannel: 'Mobile App',
+                    segment: 'High-Value Regular'
+                },
+                {
+                    id: 'DEMO_002',
+                    name: 'Sample Customer B',
+                    tier: 'Silver',
+                    totalSpent: '$1,890',
+                    lastActivity: '1 week ago',
+                    preferredChannel: 'Online Store',
+                    segment: 'Seasonal Shopper'
+                },
+                {
+                    id: 'DEMO_003',
+                    name: 'Sample Customer C',
+                    tier: 'Platinum',
+                    totalSpent: '$7,560',
+                    lastActivity: '1 day ago',
+                    preferredChannel: 'Physical Store',
+                    segment: 'VIP Customer'
+                }
+            ];
+            
+            const profile = profiles[Math.floor(Math.random() * profiles.length)];
+            
+            document.getElementById('customerProfile').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Customer Overview</h4>
+                        <p><strong>ID:</strong> ${profile.id}</p>
+                        <p><strong>Name:</strong> ${profile.name}</p>
+                        <p><strong>Tier:</strong> ${profile.tier}</p>
+                        <p><strong>Segment:</strong> ${profile.segment}</p>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 1rem;">
+                            <em>* Sample data for demonstration</em>
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Engagement Metrics</h4>
+                        <p><strong>Total Spent:</strong> ${profile.totalSpent}</p>
+                        <p><strong>Last Activity:</strong> ${profile.lastActivity}</p>
+                        <p><strong>Preferred Channel:</strong> ${profile.preferredChannel}</p>
+                        <p><strong>Status:</strong> <span style="color: #68d391;">Active</span></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleQualification(event) {
+            event.preventDefault();
+            
+            // Show next steps modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); z-index: 10000; display: flex;
+                align-items: center; justify-content: center; padding: 2rem;
+            `;
+            modal.innerHTML = `
+                <div style="background: #1a1f29; padding: 3rem; border-radius: 15px; max-width: 600px; border: 1px solid #2d3748;">
+                    <h3 style="color: #4299e1; margin-bottom: 1.5rem; text-align: center;">Thank You for Your Interest!</h3>
+                    <p style="color: #e1e8ed; margin-bottom: 2rem; line-height: 1.6;">
+                        Your project inquiry has been received. Here's what happens next:
+                    </p>
+                    <div style="background: #0f1419; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid #2d3748;">
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Next Steps:</h4>
+                        <ul style="color: #a0aec0; line-height: 1.8; padding-left: 1.5rem;">
+                            <li><strong>24 hours:</strong> Initial response with technical assessment</li>
+                            <li><strong>3-5 days:</strong> Detailed proposal with architecture recommendations</li>
+                            <li><strong>1-2 weeks:</strong> Discovery call to discuss your specific requirements</li>
+                            <li><strong>2-3 weeks:</strong> Finalized project plan and timeline</li>
+                        </ul>
+                    </div>
+                    <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2rem;">
+                        I'll personally review your requirements and provide a comprehensive response 
+                        with technical approach, realistic timeline, and investment details.
+                    </p>
+                    <div style="text-align: center;">
+                        <button onclick="document.body.removeChild(this.parentElement.parentElement)" 
+                                style="background: #4299e1; color: #f7fafc; padding: 1rem 2rem; border: none; border-radius: 25px; cursor: pointer; font-weight: 600;">
+                            Perfect, Looking Forward to Your Response
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Reset form
+            event.target.reset();
+            document.getElementById('fileList').innerHTML = '';
+        }
+
+        // File handling functions
+        function setupFileHandling() {
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            let uploadedFiles = [];
+
+            // Click to upload
+            fileDropZone.addEventListener('click', () => fileInput.click());
+
+            // Drag and drop
+            fileDropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileDropZone.classList.add('dragover');
+            });
+
+            fileDropZone.addEventListener('dragleave', () => {
+                fileDropZone.classList.remove('dragover');
+            });
+
+            fileDropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileDropZone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+
+            function handleFiles(files) {
+                Array.from(files).forEach(file => {
+                    if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                        alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+                        return;
+                    }
+                    
+                    uploadedFiles.push(file);
+                    displayFile(file);
+                });
+            }
+
+            function displayFile(file) {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                    <button onclick="removeFile('${file.name}')">Remove</button>
+                `;
+                fileList.appendChild(fileItem);
+            }
+
+            window.removeFile = function(fileName) {
+                uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+                const fileItems = fileList.querySelectorAll('.file-item');
+                fileItems.forEach(item => {
+                    if (item.textContent.includes(fileName)) {
+                        item.remove();
+                    }
+                });
+            };
+        }
+
+        // Download functions that actually work
+        function downloadSolutionOverview() {
+            const content = `Customer Data Platform - Solution Overview
+
+Architecture: Modern Lakehouse with Azure Databricks
+Processing: Real-time + Batch data processing
+Data Sources: 3-12 typical enterprise systems
+Volume: 50GB-1TB daily processing capacity
+Timeline: 3-8 months typical implementation
+
+Key Features:
+- Unified customer 360° view
+- Real-time analytics and reporting
+- Self-service business intelligence
+- Automated data quality checks
+- Compliance and governance frameworks
+
+Technology Stack:
+- Azure Databricks & Delta Lake
+- Azure Data Factory for orchestration
+- Power BI for analytics and reporting
+- Azure Event Hubs for real-time streaming
+- MLOps for advanced analytics
+
+Business Impact:
+- 60-85% reduction in reporting time
+- Improved data quality and consistency
+- Enhanced customer insights and analytics
+- Scalable foundation for AI/ML initiatives
+
+For detailed technical specifications and implementation planning,
+please contact Viresh Gendle at contact@krishnavtech.in`;
+            
+            downloadTextFile('Customer_Data_Platform_Overview.txt', content);
+        }
+
+        function downloadArchitectureDiagram() {
+            // Create a simple SVG diagram
+            const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 16px sans-serif; fill: #333; }
+      .box { fill: #e1f5fe; stroke: #01579b; stroke-width: 2; }
+      .text { font: 12px sans-serif; fill: #333; }
+      .arrow { stroke: #666; stroke-width: 2; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+  
+  <text x="400" y="30" text-anchor="middle" class="title">Customer Data Platform Architecture</text>
+  
+  <!-- Data Sources -->
+  <rect x="50" y="80" width="120" height="60" class="box" rx="5"/>
+  <text x="110" y="105" text-anchor="middle" class="text">Data Sources</text>
+  <text x="110" y="120" text-anchor="middle" class="text">CRM, POS, Web</text>
+  
+  <!-- Ingestion -->
+  <rect x="220" y="80" width="120" height="60" class="box" rx="5"/>
+  <text x="280" y="105" text-anchor="middle" class="text">Data Ingestion</text>
+  <text x="280" y="120" text-anchor="middle" class="text">Event Hubs, ADF</text>
+  
+  <!-- Bronze Layer -->
+  <rect x="50" y="200" width="120" height="60" class="box" rx="5"/>
+  <text x="110" y="225" text-anchor="middle" class="text">Bronze Layer</text>
+  <text x="110" y="240" text-anchor="middle" class="text">Raw Data</text>
+  
+  <!-- Silver Layer -->
+  <rect x="220" y="200" width="120" height="60" class="box" rx="5"/>
+  <text x="280" y="225" text-anchor="middle" class="text">Silver Layer</text>
+  <text x="280" y="240" text-anchor="middle" class="text">Cleaned Data</text>
+  
+  <!-- Gold Layer -->
+  <rect x="390" y="200" width="120" height="60" class="box" rx="5"/>
+  <text x="450" y="225" text-anchor="middle" class="text">Gold Layer</text>
+  <text x="450" y="240" text-anchor="middle" class="text">Business Ready</text>
+  
+  <!-- Analytics -->
+  <rect x="560" y="80" width="120" height="60" class="box" rx="5"/>
+  <text x="620" y="105" text-anchor="middle" class="text">Analytics</text>
+  <text x="620" y="120" text-anchor="middle" class="text">Power BI, APIs</text>
+  
+  <!-- Arrows -->
+  <line x1="170" y1="110" x2="210" y2="110" class="arrow"/>
+  <line x1="280" y1="150" x2="280" y2="190" class="arrow"/>
+  <line x1="170" y1="230" x2="210" y2="230" class="arrow"/>
+  <line x1="340" y1="230" x2="380" y2="230" class="arrow"/>
+  <line x1="450" y1="190" x2="450" y2="150" class="arrow"/>
+  <line x1="510" y1="110" x2="550" y2="110" class="arrow"/>
+</svg>`;
+            
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Customer_Data_Platform_Architecture.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadSampleReport() {
+            const csvContent = `Customer Analytics Report - Sample Data
+
+Metric,Value,Period,Notes
+Total Customers,125000,Q4 2024,Active customer base
+New Customers,2800,December 2024,Monthly acquisition
+Customer Retention Rate,87%,Q4 2024,Quarterly retention
+Average Order Value,$142.50,Q4 2024,Quarterly average
+Top Customer Segment,Premium (35%),Q4 2024,By revenue contribution
+Data Quality Score,96.2%,Latest,Automated monitoring
+Report Generation Time,8 minutes,Latest,Automated process
+Cost per Report,$12.50,Latest,Operational cost
+
+Channel Performance:
+Online Store,42%,Revenue share
+Physical Stores,35%,Revenue share
+Mobile App,18%,Revenue share
+Marketplace,5%,Revenue share
+
+Regional Distribution:
+North America,45%,Customer base
+Europe,30%,Customer base
+Asia Pacific,20%,Customer base
+Other,5%,Customer base
+
+Note: This is sample data for demonstration purposes.
+Real implementation would include client-specific KPIs and metrics.`;
+            
+            downloadTextFile('Sample_Customer_Analytics_Report.csv', csvContent);
+        }
+
+        function downloadROICalculator() {
+            // Create a simple CSV that can be opened in Excel
+            const csvContent = `Customer Data Platform ROI Calculator
+
+Current State Assessment:
+Metric,Your Value,Notes
+Number of Data Sources,,How many systems have customer data?
+Manual Report Hours per Week,,Time spent on manual reporting
+Data Quality Issues per Month,,Approximate number of data issues
+IT Team Size,,People working on data tasks
+Average Salary per Person,,$75000 typical range
+
+Projected Benefits:
+Benefit Category,Annual Value,Calculation
+Time Savings - Reporting,,Manual hours × hourly rate × 52 weeks × 0.75
+Time Savings - Data Issues,,Issue resolution time × hourly rate × 12 months × 0.6  
+Improved Decision Speed,,Revenue impact from faster insights
+Data Quality Improvements,,Cost of poor data quality × 0.4
+Additional Analytics Capabilities,,New insights value
+
+Implementation Costs:
+Cost Category,One-time Cost,Annual Cost
+Platform Development,,$150000-400000 typical range
+Infrastructure (Azure),,Variable based on usage
+Training & Change Management,,$25000-75000 typical
+Ongoing Support & Maintenance,,15-20% of development cost
+
+ROI Calculation:
+Total Annual Benefits,,Sum of all benefit categories
+Total Annual Costs,,Implementation cost + annual costs
+Net Annual Benefit,,Benefits - Costs
+ROI Percentage,,Net Benefit / Total Costs × 100
+Payback Period (months),,Implementation Cost / Monthly Net Benefit
+
+Instructions:
+1. Fill in your current state values
+2. Estimate benefit values based on your situation
+3. Calculate ROI using the formulas provided
+4. Contact Viresh Gendle for detailed assessment
+
+For professional ROI analysis and project planning:
+Email: contact@krishnavtech.in`;
+            
+            downloadTextFile('Customer_Data_Platform_ROI_Calculator.csv', csvContent);
+        }
+
+        function downloadTextFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function openTechDoc(type) {
+            const docContent = generateDocContent(type);
+            const blob = new Blob([docContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            document.getElementById('docTitle').textContent = getDocTitle(type);
+            document.getElementById('docViewer').src = url;
+            document.getElementById('docModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('docModal').style.display = 'none';
+            document.getElementById('docViewer').src = '';
+        }
+
+        function getDocTitle(type) {
+            const titles = {
+                'architecture': 'Solution Architecture Guide',
+                'implementation': 'Implementation Playbook',
+                'best-practices': 'Data Engineering Best Practices',
+                'business-case': 'Business Case Template'
+            };
+            return titles[type] || 'Technical Documentation';
+        }
+
+        function generateDocContent(type) {
+            const contents = {
+                'architecture': '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n\n4 0 obj\n<<\n/Length 75\n>>\nstream\nBT\n/F1 14 Tf\n50 750 Td\n(Customer Data Platform - Technical Architecture) Tj\n0 -30 Td\n(Medallion Architecture with Azure Databricks) Tj\nET\nendstream\nendobj\n\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000189 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n316\n%%EOF',
+                'implementation': '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n\n4 0 obj\n<<\n/Length 85\n>>\nstream\nBT\n/F1 14 Tf\n50 750 Td\n(Implementation Playbook - Data Platform) Tj\n0 -30 Td\n(Step-by-step deployment guide with code samples) Tj\nET\nendstream\nendobj\n\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000189 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n326\n%%EOF',
+                'best-practices': '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n\n4 0 obj\n<<\n/Length 80\n>>\nstream\nBT\n/F1 14 Tf\n50 750 Td\n(Data Engineering Best Practices) Tj\n0 -30 Td\n(Performance, Quality, and Operational Excellence) Tj\nET\nendstream\nendobj\n\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000189 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n321\n%%EOF',
+                'business-case': '%PDF-1.4\n1 0 obj\n<<\n/Type /Catalog\n/Pages 2 0 R\n>>\nendobj\n\n2 0 obj\n<<\n/Type /Pages\n/Kids [3 0 R]\n/Count 1\n>>\nendobj\n\n3 0 obj\n<<\n/Type /Page\n/Parent 2 0 R\n/MediaBox [0 0 612 792]\n/Contents 4 0 R\n>>\nendobj\n\n4 0 obj\n<<\n/Length 75\n>>\nstream\nBT\n/F1 14 Tf\n50 750 Td\n(Business Case Template - Data Platform ROI) Tj\n0 -30 Td\n(Cost-benefit analysis and justification framework) Tj\nET\nendstream\nendobj\n\nxref\n0 5\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000189 00000 n \ntrailer\n<<\n/Size 5\n/Root 1 0 R\n>>\nstartxref\n316\n%%EOF'
+            };
+            return contents[type] || contents['architecture'];
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', function() {
+            setTimeout(initCharts, 100);
+            setupFileHandling();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('[style*="position: fixed"]');
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
