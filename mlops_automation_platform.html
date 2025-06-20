@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps Automation Platform | Enterprise ML Operations Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e1e8ed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .platform-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .title-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #6366f1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.2rem;
+        }
+
+        .title-text .subtitle {
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.healthy { background: #10b981; }
+        .status-dot.warning { background: #f59e0b; }
+        .status-dot.error { background: #ef4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Hero Dashboard */
+        .hero-dashboard {
+            padding: 2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-card:nth-child(1) { --accent-color: #10b981; }
+        .metric-card:nth-child(2) { --accent-color: #3b82f6; }
+        .metric-card:nth-child(3) { --accent-color: #8b5cf6; }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-icon {
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .change-positive { color: #10b981; }
+        .change-negative { color: #ef4444; }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e1e8ed;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Pipeline Status */
+        .pipeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pipeline-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .pipeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .pipeline-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-running {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .pipeline-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #a1a1aa;
+            font-size: 0.8rem;
+        }
+
+        .pipeline-progress {
+            flex: 1;
+            margin: 0 1rem;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Model Registry */
+        .model-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .model-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #6366f1;
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .model-name {
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .model-version {
+            color: #6366f1;
+            font-size: 0.8rem;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .model-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+        }
+
+        .metric-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .model-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .chart-small {
+            height: 200px;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #a1a1aa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Real-time Logs */
+        .log-container {
+            background: #0f1419;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem;
+            border-radius: 4px;
+        }
+
+        .log-info { color: #3b82f6; }
+        .log-success { color: #10b981; }
+        .log-warning { color: #f59e0b; }
+        .log-error { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+        /* Deployment Cards */
+        .deployment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .deployment-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .deployment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .deployment-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .deployment-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .deployment-status {
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* A/B Testing */
+        .ab-test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .variant-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .variant-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .conversion-rate {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .variant-a .conversion-rate { color: #3b82f6; }
+        .variant-b .conversion-rate { color: #8b5cf6; }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-indicators {
+                justify-content: center;
+            }
+            
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .ab-test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .alert-text {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        /* Loading States */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #6366f1;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1f29, #16213e);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .infrastructure-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .infra-section {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #6366f1;
+        }
+
+        .infra-title {
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+        }
+
+        .infra-details {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Project Inquiry Form */
+        .project-inquiry {
+            margin: 3rem 0;
+            padding: 3rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .inquiry-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .inquiry-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #6366f1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .inquiry-subtitle {
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .inquiry-form {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            color: #e1e8ed;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e1e8ed;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success message */
+        .success-modal {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .success-text {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #ffffff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="platform-title">
+                    <div class="platform-icon">🤖</div>
+                    <div class="title-text">
+                        <h1>MLOps Automation Platform</h1>
+                        <div class="subtitle">Enterprise ML Operations • Model Lifecycle Management • Continuous Deployment</div>
+                    </div>
+                </div>
+                <div class="status-indicators">
+                    <div class="status-indicator">
+                        <div class="status-dot healthy"></div>
+                        <span>System Health</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot healthy"></div>
+                        <span>5 Models Active</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot warning"></div>
+                        <span>2 Pipelines Running</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="alert-banner">
+            <div class="alert-text">
+                🔬 MLOps Platform Demonstration - This showcases enterprise-grade ML operations capabilities with real-time monitoring and automated deployment workflows
+            </div>
+        </div>
+    </div>
+
+    <section class="hero-dashboard">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Active Models</div>
+                        <div class="metric-icon">🚀</div>
+                    </div>
+                    <div class="metric-value">12</div>
+                    <div class="metric-change">
+                        <span class="change-positive">↑ 3 new this month</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Model Accuracy</div>
+                        <div class="metric-icon">🎯</div>
+                    </div>
+                    <div class="metric-value">94.7%</div>
+                    <div class="metric-change">
+                        <span class="change-positive">↑ 2.3% improvement</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Pipeline Success</div>
+                        <div class="metric-icon">⚡</div>
+                    </div>
+                    <div class="metric-value">99.2%</div>
+                    <div class="metric-change">
+                        <span class="change-positive">↑ 0.5% this week</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: rgba(0, 0, 0, 0.8); padding: 2rem 0; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container">
+            <div style="color: #a1a1aa; margin-bottom: 1rem;">
+                <h3 style="color: #ffffff; margin-bottom: 0.5rem;">MLOps Automation Platform</h3>
+                <p>Enterprise ML Operations • Continuous Deployment • Model Governance</p>
+            </div>
+            <div style="color: #6b7280; font-size: 0.9rem;">
+                <p>&copy; 2025 Viresh Gendle | Krishnav Tech | Enterprise MLOps Solutions</p>
+                <p style="margin-top: 0.5rem;">Technical Capability Demonstration • Real Client Projects Under NDA</p>
+            </div>
+        </div>
+    </footer>
+
+    <main class="container">
+        <div class="main-content">
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">ML Pipeline Monitor</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="refreshPipelines()">
+                            <span id="refreshIcon">🔄</span> Refresh
+                        </button>
+                        <button class="btn btn-primary" onclick="showNewPipelineModal()">+ New Pipeline</button>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="showTab('running')">Running</button>
+                        <button class="tab-button" onclick="showTab('completed')">Completed</button>
+                        <button class="tab-button" onclick="showTab('failed')">Failed</button>
+                        <button class="tab-button" onclick="showTab('scheduled')">Scheduled</button>
+                    </div>
+
+                    <div id="running" class="tab-content active">
+                        <div class="pipeline-list" id="runningPipelines">
+                            <!-- Pipelines will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div id="completed" class="tab-content">
+                        <div class="pipeline-list" id="completedPipelines">
+                            <!-- Pipelines will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div id="failed" class="tab-content">
+                        <div class="pipeline-list" id="failedPipelines">
+                            <!-- Pipelines will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div id="scheduled" class="tab-content">
+                        <div class="pipeline-list" id="scheduledPipelines">
+                            <!-- Pipelines will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h3 class="section-title">Real-time Logs</h3>
+                    <button class="btn btn-secondary" onclick="clearLogs()">Clear Logs</button>
+                </div>
+                <div class="log-container" id="logContainer">
+                    <!-- Logs will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Model Registry</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" onclick="exportModelRegistry()">Export</button>
+                        <button class="btn btn-primary" onclick="showDeployModal()">Deploy Model</button>
+                    </div>
+                </div>
+
+                <div class="model-grid" id="modelRegistry">
+                    <!-- Models will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Analytics Section -->
+        <div class="content-section" style="margin: 2rem 0;">
+            <div class="section-header">
+                <h2 class="section-title">Performance Analytics</h2>
+                <div class="section-actions">
+                    <button class="btn btn-secondary" onclick="toggleTimeRange()">Last 7 Days</button>
+                    <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="color: #ffffff; margin-bottom: 1rem;">Model Accuracy Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #ffffff; margin-bottom: 1rem;">Training Performance</h3>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- A/B Testing Section -->
+        <div class="content-section" style="margin: 2rem 0;">
+            <div class="section-header">
+                <h2 class="section-title">A/B Testing Dashboard</h2>
+                <div class="section-actions">
+                    <button class="btn btn-secondary" onclick="pauseTest()">Pause Test</button>
+                    <button class="btn btn-primary" onclick="promoteWinner()">Promote Winner</button>
+                </div>
+            </div>
+
+            <div class="ab-test-grid">
+                <div class="variant-card variant-a">
+                    <div class="variant-title">Model A (Control)</div>
+                    <div class="conversion-rate">87.3%</div>
+                    <div style="color: #a1a1aa; margin-bottom: 1rem;">Accuracy Rate</div>
+                    <div style="font-size: 0.9rem; color: #a1a1aa;">
+                        <div>Traffic: 50% • Requests: 12,450</div>
+                        <div>Avg Response: 240ms</div>
+                    </div>
+                </div>
+                <div class="variant-card variant-b">
+                    <div class="variant-title">Model B (Challenger)</div>
+                    <div class="conversion-rate">91.7%</div>
+                    <div style="color: #a1a1aa; margin-bottom: 1rem;">Accuracy Rate</div>
+                    <div style="font-size: 0.9rem; color: #a1a1aa;">
+                        <div>Traffic: 50% • Requests: 12,380</div>
+                        <div>Avg Response: 210ms</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h4 style="color: #ffffff; margin-bottom: 1rem;">Test Results Distribution</h4>
+                <div class="chart-container chart-small">
+                    <canvas id="abTestChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deployment Infrastructure -->
+        <div class="content-section" style="margin: 2rem 0;">
+            <div class="section-header">
+                <h2 class="section-title">Deployment Infrastructure</h2>
+                <div class="section-actions">
+                    <button class="btn btn-secondary" onclick="viewInfrastructure()">View Details</button>
+                    <button class="btn btn-primary" onclick="scaleInfrastructure()">Auto Scale</button>
+                </div>
+            </div>
+
+            <div class="deployment-grid">
+                <div class="deployment-card">
+                    <div class="deployment-icon">☁️</div>
+                    <div class="deployment-title">Cloud Endpoints</div>
+                    <div class="deployment-status" style="color: #10b981;">8 Active</div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa;">Azure ML • AWS SageMaker</div>
+                </div>
+
+                <div class="deployment-card">
+                    <div class="deployment-icon">🐳</div>
+                    <div class="deployment-title">Containers</div>
+                    <div class="deployment-status" style="color: #3b82f6;">15 Running</div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa;">Kubernetes • Docker</div>
+                </div>
+
+                <div class="deployment-card">
+                    <div class="deployment-icon">🔧</div>
+                    <div class="deployment-title">API Gateway</div>
+                    <div class="deployment-status" style="color: #10b981;">Operational</div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa;">99.98% Uptime</div>
+                </div>
+
+                <div class="deployment-card">
+                    <div class="deployment-icon">📊</div>
+                    <div class="deployment-title">Monitoring</div>
+                    <div class="deployment-status" style="color: #10b981;">All Systems OK</div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa;">Prometheus • Grafana</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Project Inquiry Section -->
+    <section class="project-inquiry">
+        <div class="container">
+            <div class="inquiry-content">
+                <h2 class="inquiry-title">Ready to Build Your MLOps Platform?</h2>
+                <p class="inquiry-subtitle">
+                    Transform your machine learning operations with enterprise-grade automation, monitoring, and deployment capabilities. 
+                    Let's discuss how we can build a custom MLOps solution for your organization.
+                </p>
+                
+                <form class="inquiry-form" id="inquiryForm" onsubmit="handleInquirySubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" class="form-input" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job Title *</label>
+                            <input type="text" class="form-input" name="title" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Company *</label>
+                            <input type="text" class="form-input" name="company" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address *</label>
+                            <input type="email" class="form-input" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Industry</label>
+                            <select class="form-select" name="industry">
+                                <option value="">Select Industry</option>
+                                <option value="technology">Technology</option>
+                                <option value="finance">Financial Services</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="retail">Retail/E-commerce</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Team Size</label>
+                            <select class="form-select" name="teamSize">
+                                <option value="">Select Team Size</option>
+                                <option value="small">1-10 people</option>
+                                <option value="medium">11-50 people</option>
+                                <option value="large">51-200 people</option>
+                                <option value="enterprise">200+ people</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Current ML Maturity</label>
+                            <select class="form-select" name="maturity">
+                                <option value="">Select Current State</option>
+                                <option value="exploring">Just exploring ML</option>
+                                <option value="poc">Proof of concepts</option>
+                                <option value="production">Models in production</option>
+                                <option value="advanced">Advanced ML operations</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Timeline</label>
+                            <select class="form-select" name="timeline">
+                                <option value="">Select Timeline</option>
+                                <option value="urgent">ASAP (1-2 months)</option>
+                                <option value="soon">3-6 months</option>
+                                <option value="planned">6-12 months</option>
+                                <option value="exploring">Just exploring</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Requirements *</label>
+                        <textarea class="form-textarea" name="requirements" placeholder="Describe your MLOps challenges, goals, and requirements. Include details about your current ML workflow, data volumes, model types, and specific pain points you're looking to solve..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Budget Range (Optional)</label>
+                        <select class="form-select" name="budget">
+                            <option value="">Select Budget Range</option>
+                            <option value="small">$25K - $75K</option>
+                            <option value="medium">$75K - $200K</option>
+                            <option value="large">$200K - $500K</option>
+                            <option value="enterprise">$500K+</option>
+                            <option value="discuss">Prefer to discuss</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="form-submit" id="inquirySubmitBtn">
+                        Send Project Inquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Details -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification for user actions -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Sample data and state management
+        let currentTimeRange = '7d';
+        let isRefreshing = false;
+        let abTestPaused = false;
+        let autoScalingEnabled = false;
+
+        // Chart data for different time ranges
+        const chartData = {
+            '7d': {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                churnData: [94.2, 94.5, 94.1, 94.7, 94.9, 94.6, 94.7],
+                recommendationData: [90.8, 91.1, 91.0, 91.3, 91.2, 91.5, 91.3],
+                performanceData: [125, 45, 78, 62],
+                previousPerformanceData: [142, 52, 85, 71]
+            },
+            '30d': {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                churnData: [93.8, 94.2, 94.5, 94.7],
+                recommendationData: [90.2, 90.6, 91.0, 91.3],
+                performanceData: [135, 48, 82, 68],
+                previousPerformanceData: [158, 61, 94, 79]
+            }
+        };
+
+        // Pipeline data with dynamic updates
+        let pipelinesData = {
+            running: [
+                {
+                    name: 'Customer Churn Prediction',
+                    status: 'running',
+                    progress: 75,
+                    duration: '45m 23s',
+                    type: 'Training'
+                },
+                {
+                    name: 'Recommendation Engine v2.1',
+                    status: 'running',
+                    progress: 30,
+                    duration: '12m 45s',
+                    type: 'Validation'
+                }
+            ],
+            completed: [
+                {
+                    name: 'Fraud Detection Model',
+                    status: 'completed',
+                    progress: 100,
+                    duration: '1h 15m',
+                    type: 'Deployment'
+                },
+                {
+                    name: 'Price Optimization',
+                    status: 'completed',
+                    progress: 100,
+                    duration: '2h 30m',
+                    type: 'Training'
+                }
+            ],
+            failed: [
+                {
+                    name: 'Inventory Forecast',
+                    status: 'failed',
+                    progress: 65,
+                    duration: '1h 05m',
+                    type: 'Training'
+                }
+            ],
+            scheduled: [
+                {
+                    name: 'Weekly Model Retrain',
+                    status: 'scheduled',
+                    progress: 0,
+                    duration: 'In 2h 15m',
+                    type: 'Training'
+                }
+            ]
+        };
+
+        // Models data with dynamic updates
+        let modelsData = [
+            {
+                name: 'Customer Churn Predictor',
+                version: 'v3.2.1',
+                accuracy: '94.7%',
+                f1Score: '0.89',
+                deploymentStatus: 'Production',
+                lastUpdate: '2 hours ago'
+            },
+            {
+                name: 'Recommendation Engine',
+                version: 'v2.1.0',
+                accuracy: '91.3%',
+                f1Score: '0.85',
+                deploymentStatus: 'Staging',
+                lastUpdate: '1 day ago'
+            },
+            {
+                name: 'Fraud Detection',
+                version: 'v1.8.3',
+                accuracy: '96.2%',
+                f1Score: '0.92',
+                deploymentStatus: 'Production',
+                lastUpdate: '3 hours ago'
+            }
+        ];
+
+        // Dashboard metrics
+        let dashboardMetrics = {
+            activeModels: 12,
+            modelAccuracy: 94.7,
+            pipelineSuccess: 99.2,
+            changes: {
+                models: 3,
+                accuracy: 2.3,
+                success: 0.5
+            }
+        };
+
+        // A/B Test data
+        let abTestData = {
+            modelA: { accuracy: 87.3, traffic: 50, requests: 12450, response: 240 },
+            modelB: { accuracy: 91.7, traffic: 50, requests: 12380, response: 210 },
+            distribution: [35, 58, 7]
+        };
+
+        // Log entries
+        let logEntries = [
+            { time: '14:23:45', level: 'info', message: 'Starting model training pipeline: customer-churn-v3.2.1' },
+            { time: '14:24:01', level: 'success', message: 'Data validation completed successfully' },
+            { time: '14:24:15', level: 'info', message: 'Feature engineering in progress...' },
+            { time: '14:25:30', level: 'warning', message: 'GPU utilization at 85% - monitoring performance' },
+            { time: '14:26:42', level: 'success', message: 'Model training epoch 15/25 completed' }
+        ];
+
+        // Initialize charts
+        let accuracyChart, performanceChart, abTestChart;
+
+        function initializeCharts() {
+            // Accuracy Chart
+            const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
+            const currentData = chartData[currentTimeRange];
+            
+            accuracyChart = new Chart(accuracyCtx, {
+                type: 'line',
+                data: {
+                    labels: currentData.labels,
+                    datasets: [{
+                        label: 'Churn Model',
+                        data: currentData.churnData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Recommendation Engine',
+                        data: currentData.recommendationData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#a1a1aa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: { 
+                            ticks: { color: '#a1a1aa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            min: 88,
+                            max: 96
+                        }
+                    }
+                }
+            });
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(performanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Training Time', 'Inference Time', 'Memory Usage', 'CPU Usage'],
+                    datasets: [{
+                        label: 'Current',
+                        data: currentData.performanceData,
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                        borderColor: '#6366f1',
+                        borderWidth: 1
+                    }, {
+                        label: 'Previous',
+                        data: currentData.previousPerformanceData,
+                        backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#a1a1aa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: { 
+                            ticks: { color: '#a1a1aa' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // A/B Test Chart
+            const abTestCtx = document.getElementById('abTestChart').getContext('2d');
+            abTestChart = new Chart(abTestCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Model A Wins', 'Model B Wins', 'Neutral'],
+                    datasets: [{
+                        data: abTestData.distribution,
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#6b7280'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts with new data
+        function updateCharts() {
+            const currentData = chartData[currentTimeRange];
+            
+            // Update accuracy chart
+            accuracyChart.data.labels = currentData.labels;
+            accuracyChart.data.datasets[0].data = currentData.churnData;
+            accuracyChart.data.datasets[1].data = currentData.recommendationData;
+            accuracyChart.update('active');
+            
+            // Update performance chart
+            performanceChart.data.datasets[0].data = currentData.performanceData;
+            performanceChart.data.datasets[1].data = currentData.previousPerformanceData;
+            performanceChart.update('active');
+            
+            // Update A/B test chart
+            abTestChart.data.datasets[0].data = abTestData.distribution;
+            abTestChart.update('active');
+        }
+
+        // Update dashboard metrics
+        function updateDashboardMetrics() {
+            // Update metric values in the dashboard
+            const metricCards = document.querySelectorAll('.metric-value');
+            metricCards[0].textContent = dashboardMetrics.activeModels;
+            metricCards[1].textContent = dashboardMetrics.modelAccuracy.toFixed(1) + '%';
+            metricCards[2].textContent = dashboardMetrics.pipelineSuccess.toFixed(1) + '%';
+            
+            // Update changes
+            const changes = document.querySelectorAll('.metric-change span');
+            changes[0].textContent = `↑ ${dashboardMetrics.changes.models} new this month`;
+            changes[1].textContent = `↑ ${dashboardMetrics.changes.accuracy}% improvement`;
+            changes[2].textContent = `↑ ${dashboardMetrics.changes.success}% this week`;
+        }
+
+        // Update A/B test display
+        function updateABTestDisplay() {
+            const variantARate = document.querySelector('.variant-a .conversion-rate');
+            const variantBRate = document.querySelector('.variant-b .conversion-rate');
+            const variantADetails = document.querySelector('.variant-a .ab-test-grid + div + div');
+            const variantBDetails = document.querySelector('.variant-b .ab-test-grid + div + div');
+            
+            if (variantARate) variantARate.textContent = abTestData.modelA.accuracy + '%';
+            if (variantBRate) variantBRate.textContent = abTestData.modelB.accuracy + '%';
+        }
+
+        // Tab functionality
+        function showTab(tabId) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to selected tab
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Populate pipelines for the selected tab
+            populatePipelines(tabId);
+        }
+
+        // Populate pipeline lists
+        function populatePipelines(status) {
+            const container = document.getElementById(`${status}Pipelines`);
+            const pipelines = pipelinesData[status] || [];
+            
+            container.innerHTML = pipelines.map(pipeline => `
+                <div class="pipeline-item">
+                    <div class="pipeline-header">
+                        <div class="pipeline-name">${pipeline.name}</div>
+                        <div class="pipeline-status status-${pipeline.status}">${pipeline.status}</div>
+                    </div>
+                    <div class="pipeline-details">
+                        <span>${pipeline.type}</span>
+                        <div class="pipeline-progress">
+                            <div class="progress-bar" style="width: ${pipeline.progress}%"></div>
+                        </div>
+                        <span>${pipeline.duration}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Populate model registry
+        function populateModelRegistry() {
+            const container = document.getElementById('modelRegistry');
+            
+            container.innerHTML = modelsData.map(model => `
+                <div class="model-card">
+                    <div class="model-header">
+                        <div>
+                            <div class="model-name">${model.name}</div>
+                            <div class="model-version">${model.version}</div>
+                        </div>
+                        <div class="pipeline-status status-${model.deploymentStatus.toLowerCase()}">${model.deploymentStatus}</div>
+                    </div>
+                    <div class="model-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">Accuracy</div>
+                            <div class="metric-number">${model.accuracy}</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">F1 Score</div>
+                            <div class="metric-number">${model.f1Score}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #a1a1aa; margin-bottom: 1rem;">
+                        Updated ${model.lastUpdate}
+                    </div>
+                    <div class="model-actions">
+                        <button class="btn btn-secondary" onclick="viewModelDetails('${model.name}')">Details</button>
+                        <button class="btn btn-primary" onclick="deployModel('${model.name}')">Deploy</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Populate logs
+        function populateLogs() {
+            const container = document.getElementById('logContainer');
+            
+            container.innerHTML = logEntries.map(entry => `
+                <div class="log-entry log-${entry.level}">
+                    <span style="color: #6b7280;">[${entry.time}]</span> 
+                    <span style="text-transform: uppercase; font-weight: bold;">[${entry.level}]</span> 
+                    ${entry.message}
+                </div>
+            `).join('');
+            
+            // Auto-scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Show notification
+        function showNotification(message, duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        // Action functions with real functionality
+        function refreshPipelines() {
+            if (isRefreshing) return;
+            
+            isRefreshing = true;
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                // Update pipeline progress and add some variability
+                pipelinesData.running.forEach(pipeline => {
+                    pipeline.progress = Math.min(100, pipeline.progress + Math.floor(Math.random() * 15));
+                    if (pipeline.progress >= 100) {
+                        pipeline.status = 'completed';
+                        // Move to completed list
+                        pipelinesData.completed.unshift(pipeline);
+                        pipelinesData.running = pipelinesData.running.filter(p => p !== pipeline);
+                    }
+                });
+                
+                // Update dashboard metrics
+                dashboardMetrics.pipelineSuccess = Math.min(99.9, dashboardMetrics.pipelineSuccess + (Math.random() * 0.3));
+                updateDashboardMetrics();
+                
+                // Refresh current tab
+                const activeTab = document.querySelector('.tab-button.active').textContent.toLowerCase();
+                populatePipelines(activeTab);
+                
+                refreshIcon.innerHTML = '🔄';
+                isRefreshing = false;
+                showNotification('Pipeline data refreshed - new progress updates available');
+            }, 1500);
+        }
+
+        function showNewPipelineModal() {
+            // Add a new pipeline to the scheduled list
+            const newPipeline = {
+                name: `Model Training Pipeline ${Date.now().toString().slice(-4)}`,
+                status: 'scheduled',
+                progress: 0,
+                duration: 'Starting in 5m',
+                type: 'Training'
+            };
+            
+            pipelinesData.scheduled.push(newPipeline);
+            
+            // If we're on the scheduled tab, refresh it
+            const activeTab = document.querySelector('.tab-button.active').textContent.toLowerCase();
+            if (activeTab === 'scheduled') {
+                populatePipelines('scheduled');
+            }
+            
+            dashboardMetrics.activeModels++;
+            updateDashboardMetrics();
+            showNotification('New training pipeline scheduled successfully');
+        }
+
+        function clearLogs() {
+            logEntries = [{
+                time: new Date().toTimeString().slice(0, 8),
+                level: 'info',
+                message: 'Log history cleared by user'
+            }];
+            populateLogs();
+            showNotification('All logs cleared successfully');
+        }
+
+        function exportModelRegistry() {
+            // Create CSV content
+            const csvContent = "Model Name,Version,Accuracy,F1 Score,Status,Last Update\n" +
+                modelsData.map(model => 
+                    `${model.name},${model.version},${model.accuracy},${model.f1Score},${model.deploymentStatus},${model.lastUpdate}`
+                ).join('\n');
+            
+            // Create and download file
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'model_registry_export.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Model registry exported to CSV file');
+        }
+
+        function showDeployModal() {
+            // Simulate deploying a staging model to production
+            const stagingModel = modelsData.find(model => model.deploymentStatus === 'Staging');
+            if (stagingModel) {
+                stagingModel.deploymentStatus = 'Production';
+                stagingModel.lastUpdate = 'Just now';
+                populateModelRegistry();
+                showNotification(`${stagingModel.name} deployed to production successfully`);
+            } else {
+                showNotification('No staging models available for deployment');
+            }
+        }
+
+        function toggleTimeRange() {
+            const btn = event.target;
+            currentTimeRange = currentTimeRange === '7d' ? '30d' : '7d';
+            btn.textContent = currentTimeRange === '7d' ? 'Last 7 Days' : 'Last 30 Days';
+            
+            // Update charts with new time range data
+            updateCharts();
+            
+            showNotification(`Time range updated to ${currentTimeRange === '7d' ? '7 days' : '30 days'} - charts refreshed`);
+        }
+
+        function generateReport() {
+            showNotification('Generating comprehensive performance report...');
+            
+            setTimeout(() => {
+                // Create a detailed report
+                const reportContent = `MLOps Performance Report - ${new Date().toLocaleDateString()}
+
+SYSTEM OVERVIEW:
+- Active Models: ${dashboardMetrics.activeModels}
+- Average Model Accuracy: ${dashboardMetrics.modelAccuracy}%
+- Pipeline Success Rate: ${dashboardMetrics.pipelineSuccess}%
+
+MODEL PERFORMANCE:
+${modelsData.map(model => 
+`- ${model.name} (${model.version}): ${model.accuracy} accuracy, Status: ${model.deploymentStatus}`
+).join('\n')}
+
+A/B TEST RESULTS:
+- Model A: ${abTestData.modelA.accuracy}% accuracy, ${abTestData.modelA.requests} requests
+- Model B: ${abTestData.modelB.accuracy}% accuracy, ${abTestData.modelB.requests} requests
+- Recommendation: ${abTestData.modelB.accuracy > abTestData.modelA.accuracy ? 'Promote Model B' : 'Keep Model A'}
+
+INFRASTRUCTURE STATUS:
+- Cloud Endpoints: 8 Active
+- Containers: 15 Running  
+- API Gateway: 99.98% Uptime
+- Auto-scaling: ${autoScalingEnabled ? 'Enabled' : 'Disabled'}
+
+Generated on: ${new Date().toLocaleString()}`;
+
+                // Download report
+                const blob = new Blob([reportContent], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `mlops_report_${new Date().toISOString().slice(0, 10)}.txt`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                showNotification('Performance report generated and downloaded');
+            }, 2000);
+        }
+
+        function pauseTest() {
+            abTestPaused = !abTestPaused;
+            const btn = event.target;
+            
+            if (abTestPaused) {
+                btn.textContent = 'Resume Test';
+                btn.style.background = '#10b981';
+                showNotification('A/B test paused - traffic routing stopped');
+            } else {
+                btn.textContent = 'Pause Test';
+                btn.style.background = '';
+                showNotification('A/B test resumed - traffic routing active');
+            }
+        }
+
+        function promoteWinner() {
+            // Promote Model B as it has higher accuracy
+            abTestData.modelA.traffic = 0;
+            abTestData.modelB.traffic = 100;
+            
+            // Update the model in registry
+            const recommendationModel = modelsData.find(model => model.name.includes('Recommendation'));
+            if (recommendationModel) {
+                recommendationModel.version = 'v2.2.0';
+                recommendationModel.accuracy = abTestData.modelB.accuracy.toFixed(1) + '%';
+                recommendationModel.lastUpdate = 'Just promoted';
+                populateModelRegistry();
+            }
+            
+            // Update dashboard metrics
+            dashboardMetrics.modelAccuracy = (dashboardMetrics.modelAccuracy + abTestData.modelB.accuracy) / 2;
+            updateDashboardMetrics();
+            
+            showNotification('Model B promoted to production - 100% traffic routed');
+        }
+
+        function exportModelRegistry() {
+            // Create comprehensive CSV content
+            const csvContent = `MLOps Model Registry Export
+Generated: ${new Date().toLocaleString()}
+
+Model Name,Version,Accuracy,F1 Score,Deployment Status,Last Update,Training Algorithm,Features,Training Data Size
+${modelsData.map(model => 
+    `"${model.name}","${model.version}","${model.accuracy}","${model.f1Score}","${model.deploymentStatus}","${model.lastUpdate}","Random Forest/XGBoost","24 features","1.2M samples"`
+).join('\n')}
+
+Performance Metrics Summary:
+Average Accuracy: ${(modelsData.reduce((sum, model) => sum + parseFloat(model.accuracy), 0) / modelsData.length).toFixed(1)}%
+Production Models: ${modelsData.filter(model => model.deploymentStatus === 'Production').length}
+Staging Models: ${modelsData.filter(model => model.deploymentStatus === 'Staging').length}
+
+System Status:
+Active Models: ${dashboardMetrics.activeModels}
+Pipeline Success Rate: ${dashboardMetrics.pipelineSuccess.toFixed(1)}%
+A/B Tests Running: ${abTestPaused ? 0 : 1}
+Auto-scaling: ${autoScalingEnabled ? 'Enabled' : 'Disabled'}`;
+            
+            // Create and download file
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mlops_model_registry_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('✅ Model registry exported successfully - CSV file downloaded');
+        }
+
+        function viewInfrastructure() {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = 'Infrastructure Overview';
+            modalBody.innerHTML = `
+                <div class="infrastructure-grid">
+                    <div class="infra-section">
+                        <div class="infra-title">🏗️ Cloud Endpoints (8 Active)</div>
+                        <div class="infra-details">
+                            • Azure ML Compute: 3 instances (Standard_DS3_v2)<br>
+                            • AWS SageMaker: 2 instances (ml.m5.large)<br>
+                            • Google Cloud AI: 3 instances (n1-standard-4)<br>
+                            • Average Response Time: 180ms<br>
+                            • Uptime: 99.98% (last 30 days)
+                        </div>
+                    </div>
+                    
+                    <div class="infra-section">
+                        <div class="infra-title">🐳 Container Orchestration (15 Running)</div>
+                        <div class="infra-details">
+                            • Kubernetes Cluster: 3 nodes, 12 pods<br>
+                            • Docker Containers: 15 active, 3 pending<br>
+                            • Load Balancer: NGINX Ingress Controller<br>
+                            • Resource Utilization: CPU 65%, Memory 72%<br>
+                            • Auto-scaling: ${autoScalingEnabled ? 'Enabled' : 'Disabled'}
+                        </div>
+                    </div>
+                    
+                    <div class="infra-section">
+                        <div class="infra-title">🔌 API Gateway</div>
+                        <div class="infra-details">
+                            • Requests/minute: 2,450 average<br>
+                            • Response time: 180ms average<br>
+                            • Rate limiting: 1,000 req/min per client<br>
+                            • SSL/TLS: Enabled with auto-renewal<br>
+                            • Health checks: All endpoints healthy
+                        </div>
+                    </div>
+                    
+                    <div class="infra-section">
+                        <div class="infra-title">📊 Monitoring Stack</div>
+                        <div class="infra-details">
+                            • Prometheus: Metrics collection (100+ metrics)<br>
+                            • Grafana: 12 active dashboards<br>
+                            • Jaeger: Distributed tracing enabled<br>
+                            • ELK Stack: Centralized logging (2TB indexed)<br>
+                            • Alert rules: 24 active, 0 firing
+                        </div>
+                    </div>
+                    
+                    <div class="infra-section">
+                        <div class="infra-title">💾 Data Storage</div>
+                        <div class="infra-details">
+                            • Data Lake: 450TB total, 320TB used<br>
+                            • Model Registry: 2.8TB artifacts<br>
+                            • Feature Store: 125GB cached features<br>
+                            • Backup: Daily snapshots, 30-day retention<br>
+                            • Compliance: GDPR, SOC2, HIPAA ready
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid #10b981;">
+                    <strong style="color: #10b981;">Infrastructure Health: Excellent</strong><br>
+                    <span style="color: #a1a1aa; font-size: 0.9rem;">All systems operational • No critical alerts • Performance within normal ranges</span>
+                </div>
+            `;
+            
+            showModal();
+            showNotification('Infrastructure details loaded');
+        }
+
+        function viewModelDetails(modelName) {
+            const model = modelsData.find(m => m.name === modelName);
+            if (!model) return;
+            
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = `${model.name} - Detailed Information`;
+            modalBody.innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Version</div>
+                        <div class="detail-value">${model.version}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Deployment Status</div>
+                        <div class="detail-value">${model.deploymentStatus}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Accuracy</div>
+                        <div class="detail-value">${model.accuracy}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">F1 Score</div>
+                        <div class="detail-value">${model.f1Score}</div>
+                    </div>
+                </div>
+                
+                <div class="infra-section" style="margin: 1.5rem 0;">
+                    <div class="infra-title">🧠 Model Configuration</div>
+                    <div class="infra-details">
+                        • Algorithm: Random Forest with XGBoost ensemble<br>
+                        • Input Features: 24 engineered features<br>
+                        • Training Dataset: 1.2M samples, 80/20 train/validation split<br>
+                        • Cross-validation: 5-fold with stratified sampling<br>
+                        • Hyperparameters: Optimized via Bayesian optimization
+                    </div>
+                </div>
+                
+                <div class="infra-section">
+                    <div class="infra-title">📈 Performance Metrics</div>
+                    <div class="infra-details">
+                        • Precision: 0.94 (94% positive predictions correct)<br>
+                        • Recall: 0.88 (88% actual positives identified)<br>
+                        • AUC-ROC: 0.96 (excellent discrimination ability)<br>
+                        • Training Time: 45 minutes on 8-core GPU<br>
+                        • Inference Time: 12ms average per prediction
+                    </div>
+                </div>
+                
+                <div class="infra-section">
+                    <div class="infra-title">🚀 Deployment Information</div>
+                    <div class="infra-details">
+                        • Container: mlops-${model.name.toLowerCase().replace(/\s+/g, '-')}:${model.version}<br>
+                        • Replicas: 3 instances for high availability<br>
+                        • Memory: 2GB per replica (6GB total)<br>
+                        • CPU: 1 core per replica (3 cores total)<br>
+                        • Last Update: ${model.lastUpdate}
+                    </div>
+                </div>
+                
+                <div class="infra-section">
+                    <div class="infra-title">🔍 Model Monitoring</div>
+                    <div class="infra-details">
+                        • Data Drift: No significant drift detected<br>
+                        • Prediction Quality: 96.2% confidence score<br>
+                        • Feature Importance: Top 3 features contribute 67% of decisions<br>
+                        • Bias Detection: Fairness metrics within acceptable range<br>
+                        • Explainability: SHAP values available for predictions
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="deployModel('${modelName}'); closeModal();">
+                        ${model.deploymentStatus === 'Production' ? 'Update Deployment' : 'Deploy to Production'}
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportModelData('${modelName}')">
+                        Export Model Data
+                    </button>
+                </div>
+            `;
+            
+            showModal();
+            showNotification(`Detailed information loaded for ${modelName}`);
+        }
+
+        function exportModelData(modelName) {
+            const model = modelsData.find(m => m.name === modelName);
+            if (!model) return;
+            
+            const modelData = `Model Export: ${model.name}
+Generated: ${new Date().toLocaleString()}
+
+=== BASIC INFORMATION ===
+Name: ${model.name}
+Version: ${model.version}
+Deployment Status: ${model.deploymentStatus}
+Last Update: ${model.lastUpdate}
+
+=== PERFORMANCE METRICS ===
+Accuracy: ${model.accuracy}
+F1 Score: ${model.f1Score}
+Precision: 0.94
+Recall: 0.88
+AUC-ROC: 0.96
+
+=== TECHNICAL DETAILS ===
+Algorithm: Random Forest with XGBoost ensemble
+Features: 24 engineered features
+Training Data: 1.2M samples
+Training Time: 45 minutes
+Inference Time: 12ms average
+
+=== DEPLOYMENT CONFIG ===
+Container: mlops-${model.name.toLowerCase().replace(/\s+/g, '-')}:${model.version}
+Replicas: 3
+Memory: 2GB per replica
+CPU: 1 core per replica
+
+=== MONITORING STATUS ===
+Data Drift: No significant drift
+Prediction Quality: 96.2% confidence
+Feature Importance: Balanced distribution
+Bias Detection: Fair
+Explainability: SHAP enabled
+
+Generated by MLOps Platform v1.0`;
+
+            const blob = new Blob([modelData], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${model.name.replace(/\s+/g, '_')}_detailed_export.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification(`✅ ${model.name} data exported successfully`);
+        }
+
+        function scaleInfrastructure() {
+            autoScalingEnabled = !autoScalingEnabled;
+            const btn = event.target;
+            
+            if (autoScalingEnabled) {
+                btn.textContent = 'Disable Auto Scale';
+                btn.style.background = '#ef4444';
+                
+                // Simulate scaling up
+                setTimeout(() => {
+                    showNotification('Auto-scaling triggered: Adding 2 new compute instances');
+                }, 1000);
+                
+                showNotification('Auto-scaling enabled - will scale based on CPU/memory usage');
+            } else {
+                btn.textContent = 'Auto Scale';
+                btn.style.background = '';
+                showNotification('Auto-scaling disabled - manual scaling required');
+            }
+        }
+
+        // Modal functions
+        function showModal() {
+            document.getElementById('detailModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        // Project inquiry form handler
+        function handleInquirySubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('inquirySubmitBtn');
+            const form = document.getElementById('inquiryForm');
+            
+            // Disable submit button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending Inquiry...';
+            
+            // Get form data
+            const formData = new FormData(form);
+            const inquiryData = Object.fromEntries(formData);
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success modal
+                const modalTitle = document.getElementById('modalTitle');
+                const modalBody = document.getElementById('modalBody');
+                
+                modalTitle.textContent = 'Inquiry Submitted Successfully!';
+                modalBody.innerHTML = `
+                    <div class="success-modal">
+                        <div class="success-title">🚀 Thank You for Your Interest!</div>
+                        <div class="success-text">
+                            Your MLOps project inquiry has been received successfully. Our team will review your requirements and respond within 24 hours with:
+                            <br><br>
+                            ✅ Technical architecture recommendations<br>
+                            ✅ Implementation timeline and approach<br>
+                            ✅ Cost estimates and project phases<br>
+                            ✅ Next steps for your MLOps transformation<br>
+                            <br>
+                            <strong>What's Next:</strong><br>
+                            • Technical consultation call within 2 business days<br>
+                            • Customized MLOps strategy document<br>
+                            • Proof of concept planning session
+                        </div>
+                        <button class="btn btn-secondary" onclick="closeModal()" style="background: rgba(255,255,255,0.2);">
+                            Perfect! Looking Forward to Your Response
+                        </button>
+                    </div>
+                `;
+                
+                showModal();
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Project Inquiry';
+                
+                showNotification('✅ Project inquiry submitted successfully!');
+            }, 2000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        function deployModel(modelName) {
+            const model = modelsData.find(m => m.name === modelName);
+            if (model) {
+                if (model.deploymentStatus === 'Production') {
+                    showNotification(`${modelName} is already in production`);
+                } else {
+                    model.deploymentStatus = 'Production';
+                    model.lastUpdate = 'Just deployed';
+                    populateModelRegistry();
+                    
+                    dashboardMetrics.activeModels++;
+                    updateDashboardMetrics();
+                    
+                    showNotification(`${modelName} successfully deployed to production`);
+                }
+            }
+        }
+
+        // Simulate real-time log updates
+        function addRandomLogEntry() {
+            const logTypes = ['info', 'success', 'warning', 'error'];
+            const messages = [
+                'Model inference completed successfully',
+                'Data pipeline processing batch 1234',
+                'GPU memory utilization: 72%',
+                'Model validation in progress',
+                'Feature store updated with new data',
+                'A/B test traffic split updated',
+                'Model performance metrics collected',
+                'Container health check passed'
+            ];
+            
+            const now = new Date();
+            const timeString = now.toTimeString().slice(0, 8);
+            const randomType = logTypes[Math.floor(Math.random() * logTypes.length)];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            logEntries.push({
+                time: timeString,
+                level: randomType,
+                message: randomMessage
+            });
+            
+            // Keep only last 50 entries
+            if (logEntries.length > 50) {
+                logEntries.shift();
+            }
+            
+            populateLogs();
+        }
+
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            // Initialize data displays
+            populatePipelines('running');
+            populateModelRegistry();
+            populateLogs();
+            updateDashboardMetrics();
+            updateABTestDisplay();
+            
+            // Initialize charts after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                initializeCharts();
+            }, 100);
+            
+            // Start real-time log simulation
+            setInterval(addRandomLogEntry, 5000);
+            
+            // Start pipeline progress simulation
+            setInterval(simulatePipelineProgress, 10000);
+            
+            // Start metric updates
+            setInterval(updateRandomMetrics, 15000);
+            
+            showNotification('MLOps Platform loaded successfully - all systems operational');
+        });
+
+        // Simulate pipeline progress updates
+        function simulatePipelineProgress() {
+            let updated = false;
+            
+            pipelinesData.running.forEach(pipeline => {
+                if (pipeline.progress < 100 && Math.random() > 0.3) {
+                    pipeline.progress = Math.min(100, pipeline.progress + Math.floor(Math.random() * 10));
+                    updated = true;
+                    
+                    if (pipeline.progress >= 100) {
+                        pipeline.status = 'completed';
+                        // Add completion log
+                        addLogEntry('success', `Pipeline '${pipeline.name}' completed successfully`);
+                    }
+                }
+            });
+            
+            if (updated) {
+                const activeTab = document.querySelector('.tab-button.active').textContent.toLowerCase();
+                if (activeTab === 'running') {
+                    populatePipelines('running');
+                }
+            }
+        }
+
+        // Update random metrics for demo
+        function updateRandomMetrics() {
+            // Slight random changes to metrics
+            dashboardMetrics.modelAccuracy += (Math.random() - 0.5) * 0.2;
+            dashboardMetrics.pipelineSuccess += (Math.random() - 0.5) * 0.1;
+            
+            // Keep values in reasonable ranges
+            dashboardMetrics.modelAccuracy = Math.max(90, Math.min(98, dashboardMetrics.modelAccuracy));
+            dashboardMetrics.pipelineSuccess = Math.max(95, Math.min(99.9, dashboardMetrics.pipelineSuccess));
+            
+            updateDashboardMetrics();
+            
+            // Update A/B test data slightly
+            if (!abTestPaused) {
+                abTestData.modelA.requests += Math.floor(Math.random() * 100);
+                abTestData.modelB.requests += Math.floor(Math.random() * 100);
+                abTestData.modelA.accuracy += (Math.random() - 0.5) * 0.1;
+                abTestData.modelB.accuracy += (Math.random() - 0.5) * 0.1;
+                
+                // Keep values in reasonable ranges
+                abTestData.modelA.accuracy = Math.max(85, Math.min(95, abTestData.modelA.accuracy));
+                abTestData.modelB.accuracy = Math.max(85, Math.min(95, abTestData.modelB.accuracy));
+                
+                updateABTestDisplay();
+            }
+        }
+
+        // Helper function to add log entries
+        function addLogEntry(level, message) {
+            const now = new Date();
+            const timeString = now.toTimeString().slice(0, 8);
+            
+            logEntries.push({
+                time: timeString,
+                level: level,
+                message: message
+            });
+            
+            // Keep only last 50 entries
+            if (logEntries.length > 50) {
+                logEntries.shift();
+            }
+            
+            populateLogs();
+        }
+
+        // Add some interactivity for demo purposes
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('pipeline-item')) {
+                e.target.style.transform = 'translateX(10px)';
+                setTimeout(() => {
+                    e.target.style.transform = 'translateX(5px)';
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>
