@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & BI Solutions | Business Intelligence Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1c1917 0%, #292524 50%, #44403c 100%);
+            color: #fef7ed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(28, 25, 23, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(251, 146, 60, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .platform-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .platform-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fef7ed, #f59e0b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .platform-subtitle {
+            font-size: 0.9rem;
+            color: #fb923c;
+            font-weight: 500;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-operational { background: #10b981; }
+        .status-processing { background: #f59e0b; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            background: radial-gradient(circle at 30% 50%, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 3.8rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fef7ed, #f59e0b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #fb923c;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: #d6d3d1;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .capability-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .capability-item {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .capability-item:hover {
+            background: rgba(245, 158, 11, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .capability-icon {
+            color: #f59e0b;
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #1c1917;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(245, 158, 11, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(245, 158, 11, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero-metrics {
+            background: rgba(28, 25, 23, 0.8);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 1.2rem;
+            background: rgba(245, 158, 11, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background: rgba(245, 158, 11, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .metric-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #f59e0b;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #a8a29e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            padding: 1rem 2rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            text-align: center;
+        }
+
+        .alert-text {
+            color: #fbbf24;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Platform Features */
+        .features-section {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fef7ed, #f59e0b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #a8a29e;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(28, 25, 23, 0.9), rgba(41, 37, 36, 0.7));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fef7ed;
+        }
+
+        .feature-card p {
+            color: #a8a29e;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tag {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            font-weight: 500;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            padding: 5rem 0;
+            background: rgba(245, 158, 11, 0.02);
+        }
+
+        .demo-container {
+            background: rgba(28, 25, 23, 0.9);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.2);
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .demo-tab {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #a8a29e;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .demo-tab.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #1c1917;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .demo-tab:hover:not(.active) {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .demo-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .demo-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Interface */
+        .dashboard-interface {
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin: 2rem 0;
+        }
+
+        .dashboard-header {
+            background: #1e293b;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dashboard-btn {
+            background: #f59e0b;
+            color: #1c1917;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-btn:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+        }
+
+        .dashboard-body {
+            padding: 1.5rem;
+            background: white;
+            color: #1e293b;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .kpi-change {
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .kpi-up { color: #10b981; }
+        .kpi-down { color: #ef4444; }
+
+        /* Chart Containers */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .chart-container {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Power BI Style Interface */
+        .powerbi-interface {
+            background: #f3f2f1;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .powerbi-header {
+            background: #323130;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .powerbi-logo {
+            background: #f2c811;
+            color: #323130;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .powerbi-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .powerbi-body {
+            background: #faf9f8;
+            padding: 1.5rem;
+            color: #323130;
+        }
+
+        .powerbi-filters {
+            background: white;
+            border: 1px solid #d1d1d1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filters-title {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #323130;
+            font-size: 0.9rem;
+        }
+
+        .filter-item {
+            background: #f3f2f1;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            padding: 0.5rem 0.8rem;
+            margin: 0.3rem 0;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        /* Tableau Style Interface */
+        .tableau-interface {
+            background: #f6f6f6;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .tableau-header {
+            background: #1f4e79;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tableau-logo {
+            background: #e97627;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .tableau-body {
+            background: white;
+            padding: 1.5rem;
+            color: #333;
+        }
+
+        .tableau-workspace {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #fafafa;
+            margin: 1rem 0;
+        }
+
+        .tableau-shelves {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tableau-shelf {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.8rem;
+        }
+
+        .shelf-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .shelf-item {
+            background: #e97627;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin: 0.2rem;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+        }
+
+        .contact-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .contact-form {
+            background: rgba(28, 25, 23, 0.9);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            backdrop-filter: blur(15px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            color: #fef7ed;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            background: rgba(41, 37, 36, 0.7);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            color: #fef7ed;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #1c1917;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1c1917, #292524);
+            border: 2px solid #f59e0b;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a8a29e;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #fef7ed;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            animation: slideIn 0.5s ease-in-out;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #1c1917;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            z-index: 10001;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            font-weight: 600;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .status-bar {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-tabs {
+                flex-direction: column;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .capability-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tableau-shelves {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="platform-logo">
+                <div class="logo-icon">📊</div>
+                <div>
+                    <div class="platform-title">Analytics & BI Solutions</div>
+                    <div class="platform-subtitle">Business Intelligence Platform</div>
+                </div>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-dot status-operational"></div>
+                    <span>15 Dashboards Live</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot status-processing"></div>
+                    <span>Real-time Processing</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot status-operational"></div>
+                    <span>99.9% Uptime</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="alert-banner">
+        <div class="alert-text">
+            📈 Business Intelligence Platform Demonstration - Showcasing real-world analytics capabilities with Power BI, Tableau, and custom dashboard solutions
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Business Intelligence & Analytics Solutions</h1>
+                <div class="hero-subtitle">Power BI • Tableau • Custom Dashboards • Advanced Analytics</div>
+                <p class="hero-description">
+                    Comprehensive business intelligence solutions that transform raw data into actionable insights. 
+                    Built with industry-leading tools like Power BI and Tableau, featuring real-time analytics, 
+                    automated reporting, and interactive dashboards that drive data-driven decision making across your organization.
+                </p>
+                
+                <div class="capability-grid">
+                    <div class="capability-item">
+                        <span class="capability-icon">📊</span>
+                        Interactive Power BI & Tableau dashboards
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">⚡</span>
+                        Real-time data processing & alerts
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">🔗</span>
+                        Enterprise data source integration
+                    </div>
+                    <div class="capability-item">
+                        <span class="capability-icon">📱</span>
+                        Mobile-responsive analytics
+                    </div>
+                </div>
+
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="exploreliveDashboards()">
+                        📊 Explore Live Dashboards
+                    </button>
+                    <button class="btn btn-secondary" onclick="showTechModal()">
+                        🛠️ Technical Architecture
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-metrics">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-number">15+</span>
+                        <span class="metric-label">Data Sources Connected</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">85+</span>
+                        <span class="metric-label">KPIs Tracked</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">Real-time</span>
+                        <span class="metric-label">Data Refresh</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">150+</span>
+                        <span class="metric-label">Active Users</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">99.9%</span>
+                        <span class="metric-label">Platform Availability</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">24/7</span>
+                        <span class="metric-label">Monitoring & Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Business Intelligence Capabilities</h2>
+                <p class="section-subtitle">
+                    Comprehensive business intelligence solutions built with industry-leading tools and modern 
+                    data engineering practices to deliver scalable, secure, and actionable insights.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Power BI Development</h3>
+                    <p>
+                        Custom Power BI solutions with advanced DAX calculations, paginated reports, 
+                        embedded analytics, and automated data refresh. Professional-grade security with row-level security and integration with Azure AD.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Power BI Premium</span>
+                        <span class="tech-tag">DAX</span>
+                        <span class="tech-tag">Power Query</span>
+                        <span class="tech-tag">Azure AD</span>
+                        <span class="tech-tag">REST API</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Tableau Analytics</h3>
+                    <p>
+                        Professional Tableau dashboards with calculated fields, parameters, and advanced visualizations. 
+                        Server deployment with user management, scheduled extracts, and mobile optimization.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Tableau Server</span>
+                        <span class="tech-tag">Tableau Prep</span>
+                        <span class="tech-tag">SQL</span>
+                        <span class="tech-tag">JavaScript API</span>
+                        <span class="tech-tag">Tableau Bridge</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Data Integration & ETL</h3>
+                    <p>
+                        Robust data pipelines connecting CRM, ERP, databases, and cloud services. 
+                        Automated ETL processes with data quality checks, error handling, and performance optimization.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Azure Data Factory</span>
+                        <span class="tech-tag">SSIS</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">REST APIs</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Analytics</h3>
+                    <p>
+                        Live streaming analytics with event processing, real-time KPI monitoring, 
+                        and automated alerting. Support for high-volume data streams and low-latency reporting.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Azure Stream Analytics</span>
+                        <span class="tech-tag">Power BI Streaming</span>
+                        <span class="tech-tag">SignalR</span>
+                        <span class="tech-tag">Event Hubs</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Custom Dashboard Platform</h3>
+                    <p>
+                        Bespoke web-based dashboards with React.js frontend, responsive design, 
+                        and interactive visualizations. Full customization for branding and specific business requirements.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">D3.js</span>
+                        <span class="tech-tag">Chart.js</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">WebSockets</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Security & Governance</h3>
+                    <p>
+                        Comprehensive security framework with role-based access control, data lineage tracking, 
+                        audit trails, and compliance reporting. Integration with corporate identity providers.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Azure AD B2B</span>
+                        <span class="tech-tag">Row-level Security</span>
+                        <span class="tech-tag">GDPR Compliance</span>
+                        <span class="tech-tag">Audit Logs</span>
+                        <span class="tech-tag">Data Classification</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Interactive Platform Demonstrations</h2>
+                <p class="section-subtitle">
+                    Experience our enterprise business intelligence solutions through interactive demos 
+                    showcasing real-world dashboards and analytics capabilities.
+                </p>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-tabs">
+                    <button class="demo-tab active" onclick="showDemo('dashboard'); event.target.classList.add('active');">
+                        📊 Executive Dashboard
+                    </button>
+                    <button class="demo-tab" onclick="showDemo('powerbi'); event.target.classList.add('active');">
+                        🔷 Power BI Interface
+                    </button>
+                    <button class="demo-tab" onclick="showDemo('tableau'); event.target.classList.add('active');">
+                        🎯 Tableau Workspace
+                    </button>
+                    <button class="demo-tab" onclick="showDemo('realtime'); event.target.classList.add('active');">
+                        ⚡ Real-time Analytics
+                    </button>
+                    <button class="demo-tab" onclick="showDemo('reports'); event.target.classList.add('active');">
+                        📋 Automated Reports
+                    </button>
+                </div>
+
+                <div id="dashboard" class="demo-content active">
+                    <div class="dashboard-interface">
+                        <div class="dashboard-header">
+                            <div class="dashboard-title">Executive KPI Dashboard - Q4 2024</div>
+                            <div class="dashboard-controls">
+                                <button class="dashboard-btn" onclick="refreshDashboard()">🔄 Refresh</button>
+                                <button class="dashboard-btn" onclick="exportDashboard()">📊 Export</button>
+                                <button class="dashboard-btn" onclick="scheduleDashboard()">⏰ Schedule</button>
+                            </div>
+                        </div>
+                        <div class="dashboard-body">
+                            <div class="kpi-grid">
+                                <div class="kpi-card">
+                                    <div class="kpi-value">$2.4M</div>
+                                    <div class="kpi-label">Monthly Revenue</div>
+                                    <div class="kpi-change kpi-up">↑ 12.3% vs last month</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">1,247</div>
+                                    <div class="kpi-label">New Customers</div>
+                                    <div class="kpi-change kpi-up">↑ 8.7% vs last month</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">94.2%</div>
+                                    <div class="kpi-label">Customer Satisfaction</div>
+                                    <div class="kpi-change kpi-up">↑ 2.1% vs last month</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">87.5%</div>
+                                    <div class="kpi-label">Order Fulfillment</div>
+                                    <div class="kpi-change kpi-down">↓ 3.2% vs last month</div>
+                                </div>
+                            </div>
+                            
+                            <div class="charts-grid">
+                                <div class="chart-container">
+                                    <div class="chart-title">Revenue Trend Analysis</div>
+                                    <div class="chart-canvas">
+                                        <canvas id="revenueChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="chart-container">
+                                    <div class="chart-title">Customer Acquisition Channels</div>
+                                    <div class="chart-canvas">
+                                        <canvas id="channelChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="powerbi" class="demo-content">
+                    <div class="powerbi-interface">
+                        <div class="powerbi-header">
+                            <div class="powerbi-logo">Power BI</div>
+                            <div class="powerbi-title">Sales Performance Analytics - Q4 2024.pbix</div>
+                            <div style="margin-left: auto; font-size: 0.8rem;">📡 Connected to SQL Server • Last refresh: 2 minutes ago</div>
+                        </div>
+                        <div class="powerbi-body">
+                            <div class="powerbi-filters">
+                                <div class="filters-title">🔽 Filters (Applied to entire page)</div>
+                                <div>
+                                    <div class="filter-item">📅 Date: Q4 2024</div>
+                                    <div class="filter-item">🌍 Region: North America, Europe</div>
+                                    <div class="filter-item">📦 Product Category: All</div>
+                                    <div class="filter-item">💼 Sales Rep: All</div>
+                                </div>
+                            </div>
+                            
+                            <div class="kpi-grid">
+                                <div class="kpi-card">
+                                    <div class="kpi-value">$4.8M</div>
+                                    <div class="kpi-label">Total Sales (DAX: SUM(Sales[Amount]))</div>
+                                    <div class="kpi-change kpi-up">↑ 15.2% YoY</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">2,847</div>
+                                    <div class="kpi-label">Units Sold (SUMX calculation)</div>
+                                    <div class="kpi-change kpi-up">↑ 9.8% YoY</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">127</div>
+                                    <div class="kpi-label">Active Customers (DISTINCTCOUNT)</div>
+                                    <div class="kpi-change kpi-up">↑ 23.1% YoY</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">$1,687</div>
+                                    <div class="kpi-label">Avg Deal Size (DIVIDE function)</div>
+                                    <div class="kpi-change kpi-down">↓ 4.3% YoY</div>
+                                </div>
+                            </div>
+
+                            <div style="background: white; border: 2px solid #d1d1d1; border-radius: 8px; padding: 2rem; margin: 1.5rem 0; text-align: center;">
+                                <div style="color: #666; margin-bottom: 1rem;">📊 Sales Performance by Region (Matrix Visual)</div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                                    <div><strong>North America:</strong> $2.1M (44%)</div>
+                                    <div><strong>Europe:</strong> $1.8M (38%)</div>
+                                    <div><strong>Asia Pacific:</strong> $0.9M (18%)</div>
+                                </div>
+                                <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">
+                                    Data Model: Star schema with 5 dimension tables • Row-level security enabled
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="btn btn-primary" onclick="refreshPowerBI()">🔄 Refresh Dataset</button>
+                                <button class="btn btn-secondary" onclick="sharePowerBI()">📤 Share Report</button>
+                                <button class="btn btn-secondary" onclick="exportPowerBI()">📋 Export to PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tableau" class="demo-content">
+                    <div class="tableau-interface">
+                        <div class="tableau-header">
+                            <div class="tableau-logo">Tableau</div>
+                            <div class="tableau-title">Customer Analytics Workbook • Connected to PostgreSQL</div>
+                            <div style="margin-left: auto; font-size: 0.8rem;">🟢 Live connection • 2.3M rows</div>
+                        </div>
+                        <div class="tableau-body">
+                            <div class="tableau-shelves">
+                                <div class="tableau-shelf">
+                                    <div class="shelf-title">📊 Columns</div>
+                                    <div class="shelf-item">MONTH(Order Date)</div>
+                                    <div class="shelf-item">Product Category</div>
+                                </div>
+                                <div class="tableau-shelf">
+                                    <div class="shelf-title">📈 Rows</div>
+                                    <div class="shelf-item">SUM(Sales)</div>
+                                    <div class="shelf-item">AVG(Profit Ratio)</div>
+                                </div>
+                            </div>
+
+                            <div class="tableau-workspace">
+                                <div style="color: #666; margin-bottom: 1.5rem;">
+                                    📈 <strong>Customer Segmentation Analysis</strong> (Dual-axis chart with calculated fields)
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; text-align: left;">
+                                    <div>
+                                        <strong style="color: #e97627;">High Value Customers</strong><br>
+                                        • 247 customers (12%)<br>
+                                        • Avg Annual Value: $12,400<br>
+                                        • Retention Rate: 94%
+                                    </div>
+                                    <div>
+                                        <strong style="color: #1f4e79;">Regular Customers</strong><br>
+                                        • 1,241 customers (58%)<br>
+                                        • Avg Annual Value: $3,200<br>
+                                        • Retention Rate: 78%
+                                    </div>
+                                    <div>
+                                        <strong style="color: #666;">Occasional Buyers</strong><br>
+                                        • 656 customers (30%)<br>
+                                        • Avg Annual Value: $890<br>
+                                        • Retention Rate: 45%
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1.5rem; font-size: 0.8rem; color: #888;">
+                                    Calculated Field: IF [Total Sales] > 10000 THEN "High Value" ELSEIF [Total Sales] > 2000 THEN "Regular" ELSE "Occasional" END
+                                </div>
+                            </div>
+
+                            <div style="background: #f0f0f0; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+                                <div style="font-weight: 600; margin-bottom: 1rem; color: #333;">📋 Data Source Details</div>
+                                <div style="font-size: 0.9rem; color: #666; line-height: 1.6;">
+                                    • <strong>Primary:</strong> PostgreSQL (customers, orders, products)<br>
+                                    • <strong>Secondary:</strong> Salesforce API (leads, opportunities)<br>
+                                    • <strong>Refresh:</strong> Every 4 hours via Tableau Bridge<br>
+                                    • <strong>Performance:</strong> Extract optimization with aggregations
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="btn btn-primary" onclick="publishTableau()">🚀 Publish to Server</button>
+                                <button class="btn btn-secondary" onclick="downloadTableau()">💾 Download Workbook</button>
+                                <button class="btn btn-secondary" onclick="subscribeTableau()">📧 Subscribe to Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="realtime" class="demo-content">
+                    <h3 style="color: #f59e0b; margin-bottom: 2rem; text-align: center;">
+                        ⚡ Real-time Analytics Monitoring
+                    </h3>
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value" id="liveOrders">1,247</div>
+                            <div class="kpi-label">🔴 Live Orders</div>
+                            <div class="kpi-change kpi-up">↑ Processing</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value" id="activeUsers">2,432</div>
+                            <div class="kpi-label">👥 Active Users</div>
+                            <div class="kpi-change kpi-up">↑ Online Now</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value" id="revenueToday">$47,230</div>
+                            <div class="kpi-label">💰 Today's Revenue</div>
+                            <div class="kpi-change kpi-up">↑ Live Updates</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value" id="serverLoad">67%</div>
+                            <div class="kpi-label">🖥️ Server Load</div>
+                            <div class="kpi-change">⚡ Monitoring</div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                        <h4 style="color: #f59e0b; margin-bottom: 1rem;">🔔 Real-time Alert Configuration</h4>
+                        <div style="color: #d6d3d1; line-height: 1.8;">
+                            <div>✅ Revenue threshold alert: Trigger when hourly revenue drops below $2,000</div>
+                            <div>✅ Server performance alert: Trigger when CPU usage exceeds 85%</div>
+                            <div>✅ Customer service alert: Trigger when queue wait time > 5 minutes</div>
+                            <div>✅ Inventory alert: Trigger when stock levels below reorder point</div>
+                            <div>✅ Security alert: Trigger on unusual login patterns or failed attempts</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #1e293b; color: white; border-radius: 12px; padding: 1.5rem; margin: 2rem 0;">
+                        <h4 style="color: #f59e0b; margin-bottom: 1rem;">📡 Streaming Data Sources</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; font-size: 0.9rem;">
+                            <div>
+                                <strong>🛒 E-commerce Platform</strong><br>
+                                Orders, payments, customer behavior<br>
+                                <span style="color: #10b981;">● Connected via REST API</span>
+                            </div>
+                            <div>
+                                <strong>📱 Mobile App Analytics</strong><br>
+                                User sessions, feature usage, crashes<br>
+                                <span style="color: #10b981;">● Connected via Firebase</span>
+                            </div>
+                            <div>
+                                <strong>🏪 POS Systems</strong><br>
+                                In-store transactions, inventory<br>
+                                <span style="color: #10b981;">● Connected via SQL Server</span>
+                            </div>
+                            <div>
+                                <strong>📞 Call Center</strong><br>
+                                Call volumes, resolution times<br>
+                                <span style="color: #10b981;">● Connected via Twilio API</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="toggleRealtime()">
+                            ⚡ Start Real-time Simulation
+                        </button>
+                        <button class="btn btn-secondary" onclick="configureAlerts()">
+                            🔔 Configure Alerts
+                        </button>
+                    </div>
+                </div>
+
+                <div id="reports" class="demo-content">
+                    <h3 style="color: #f59e0b; margin-bottom: 2rem; text-align: center;">
+                        📋 Automated Reporting System
+                    </h3>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                        <h4 style="color: #f59e0b; margin-bottom: 1.5rem;">📅 Scheduled Reports Pipeline</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                            <div style="background: rgba(28, 25, 23, 0.7); padding: 1.5rem; border-radius: 8px;">
+                                <strong style="color: #fef7ed;">📊 Executive Summary</strong><br>
+                                <span style="color: #a8a29e;">Daily • 7:00 AM • PDF + Email</span><br>
+                                <span style="color: #10b981;">✅ Last run: Today 7:02 AM</span><br>
+                                <small style="color: #a8a29e;">Recipients: C-Suite, VPs (12 people)</small>
+                            </div>
+                            <div style="background: rgba(28, 25, 23, 0.7); padding: 1.5rem; border-radius: 8px;">
+                                <strong style="color: #fef7ed;">📈 Sales Performance</strong><br>
+                                <span style="color: #a8a29e;">Weekly • Monday 8:00 AM • Excel</span><br>
+                                <span style="color: #f59e0b;">⏳ Next run: Tomorrow 8:00 AM</span><br>
+                                <small style="color: #a8a29e;">Recipients: Sales team (45 people)</small>
+                            </div>
+                            <div style="background: rgba(28, 25, 23, 0.7); padding: 1.5rem; border-radius: 8px;">
+                                <strong style="color: #fef7ed;">💰 Financial Review</strong><br>
+                                <span style="color: #a8a29e;">Monthly • 1st day 9:00 AM • PDF</span><br>
+                                <span style="color: #10b981;">✅ Last run: Dec 1st 9:05 AM</span><br>
+                                <small style="color: #a8a29e;">Recipients: Finance team (8 people)</small>
+                            </div>
+                            <div style="background: rgba(28, 25, 23, 0.7); padding: 1.5rem; border-radius: 8px;">
+                                <strong style="color: #fef7ed;">🎯 Marketing Analytics</strong><br>
+                                <span style="color: #a8a29e;">Bi-weekly • Friday 10:00 AM • PDF</span><br>
+                                <span style="color: #10b981;">✅ Last run: Friday 10:03 AM</span><br>
+                                <small style="color: #a8a29e;">Recipients: Marketing team (15 people)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #1e293b; color: white; border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                        <h4 style="color: #f59e0b; margin-bottom: 1.5rem;">⚙️ Report Generation Engine</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div>
+                                <strong style="color: #fb923c;">📋 Template Management</strong><br>
+                                <span style="color: #d6d3d1; font-size: 0.9rem; line-height: 1.6;">
+                                • Power BI paginated reports (SSRS)<br>
+                                • Tableau Server subscriptions<br>
+                                • Custom Python report generator<br>
+                                • Excel templates with Power Query<br>
+                                • Dynamic PDF generation with charts
+                                </span>
+                            </div>
+                            <div>
+                                <strong style="color: #fb923c;">🔄 Automation Pipeline</strong><br>
+                                <span style="color: #d6d3d1; font-size: 0.9rem; line-height: 1.6;">
+                                • Azure Logic Apps orchestration<br>
+                                • Data refresh triggers<br>
+                                • Email distribution lists<br>
+                                • SharePoint document library<br>
+                                • Failure notifications & retry logic
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(28, 25, 23, 0.8); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 2rem; margin: 2rem 0;">
+                        <h4 style="color: #f59e0b; margin-bottom: 1rem;">📤 Recent Report Deliveries</h4>
+                        <div style="font-family: monospace; font-size: 0.8rem; color: #d6d3d1; line-height: 1.8;">
+                            <div>[2024-12-15 07:02] ✅ Executive Summary → 12 recipients → 2.3MB PDF</div>
+                            <div>[2024-12-15 06:45] ✅ Inventory Alert Report → 3 recipients → 450KB Excel</div>
+                            <div>[2024-12-14 16:30] ✅ Customer Satisfaction Weekly → 8 recipients → 1.8MB PDF</div>
+                            <div>[2024-12-14 14:15] ✅ Ad-hoc Sales Analysis → 1 recipient → 3.2MB Excel</div>
+                            <div>[2024-12-14 09:00] ✅ Operations Dashboard → 25 recipients → 1.1MB PDF</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="generateAdHocReport()">
+                            📊 Generate Ad-hoc Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="manageSubscriptions()">
+                            ⚙️ Manage Subscriptions
+                        </button>
+                        <button class="btn btn-secondary" onclick="viewReportHistory()">
+                            📋 View Report History
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="contact-container">
+            <div class="section-header">
+                <h2 class="section-title">Ready to Transform Your Analytics?</h2>
+                <p class="section-subtitle">
+                    Let's discuss your business intelligence requirements and create a comprehensive 
+                    analytics solution that drives data-driven decision making across your organization.
+                </p>
+            </div>
+
+            <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-input" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Job Title *</label>
+                        <input type="text" class="form-input" name="title" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Company *</label>
+                        <input type="text" class="form-input" name="company" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-input" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Industry Sector</label>
+                        <select class="form-select" name="industry">
+                            <option value="">Select Industry</option>
+                            <option value="financial-services">Financial Services</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="retail">Retail & E-commerce</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="technology">Technology</option>
+                            <option value="telecommunications">Telecommunications</option>
+                            <option value="energy">Energy & Utilities</option>
+                            <option value="government">Government</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company Size</label>
+                        <select class="form-select" name="companySize">
+                            <option value="">Select Size</option>
+                            <option value="startup">Startup (1-50 employees)</option>
+                            <option value="small">Small Business (51-200)</option>
+                            <option value="medium">Medium Business (201-1000)</option>
+                            <option value="large">Large Enterprise (1000+)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Current BI Tools</label>
+                        <select class="form-select" name="currentTools">
+                            <option value="">Select Current Tools</option>
+                            <option value="powerbi">Power BI</option>
+                            <option value="tableau">Tableau</option>
+                            <option value="excel">Excel / Google Sheets</option>
+                            <option value="qlik">QlikView / QlikSense</option>
+                            <option value="looker">Looker / Google Data Studio</option>
+                            <option value="none">No current BI tools</option>
+                            <option value="other">Other tools</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project Timeline</label>
+                        <select class="form-select" name="timeline">
+                            <option value="">Select Timeline</option>
+                            <option value="immediate">Immediate (1-2 months)</option>
+                            <option value="short">Short-term (3-6 months)</option>
+                            <option value="medium">Medium-term (6-12 months)</option>
+                            <option value="long">Long-term (12+ months)</option>
+                            <option value="exploring">Just exploring options</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Analytics Requirements & Business Challenges *</label>
+                    <textarea class="form-textarea" name="requirements" placeholder="Describe your current analytics challenges, data sources, reporting requirements, and business objectives. Include details about data volumes, user count, integration needs, and specific KPIs you want to track..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Budget Range (Optional)</label>
+                    <select class="form-select" name="budget">
+                        <option value="">Select Budget Range</option>
+                        <option value="small">$15K - $50K</option>
+                        <option value="medium">$50K - $150K</option>
+                        <option value="large">$150K - $500K</option>
+                        <option value="enterprise">$500K+</option>
+                        <option value="discuss">Prefer to discuss</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="form-submit" id="contactSubmitBtn">
+                    📊 Request Analytics Consultation
+                </button>
+
+                <div class="success-message" id="successMessage">
+                    🎉 Thank you for your interest! Your analytics consultation request has been submitted successfully. 
+                    I'll respond within 24 hours with a detailed proposal tailored to your business requirements.
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Technical Architecture Modal -->
+    <div id="techModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🛠️ Technical Architecture & Implementation</h3>
+                <button class="close-btn" onclick="closeTechModal()">&times;</button>
+            </div>
+            <div style="color: #a8a29e; line-height: 1.6;">
+                <h4 style="color: #f59e0b; margin-bottom: 1rem;">🎯 Business Intelligence Platform Stack</h4>
+                <p><strong>Power BI:</strong> Premium workspace with embedded analytics, paginated reports, dataflows, and automated refresh schedules<br>
+                <strong>Tableau:</strong> Server deployment with Tableau Prep for data preparation, custom connectors, and mobile optimization<br>
+                <strong>Custom Dashboards:</strong> React.js frontend with D3.js visualizations, real-time WebSocket connections, and responsive design<br>
+                <strong>Data Modeling:</strong> Star schema design, calculated measures, advanced DAX/calculated fields</p>
+
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem;">🔗 Data Integration & ETL Pipeline</h4>
+                <p><strong>Azure Data Factory:</strong> Orchestration of complex data pipelines with monitoring and error handling<br>
+                <strong>SQL Server Integration Services:</strong> On-premises ETL with performance optimization and incremental loads<br>
+                <strong>Python ETL Scripts:</strong> Custom data processing with pandas, numpy, and statistical libraries<br>
+                <strong>API Integrations:</strong> REST/GraphQL connections to CRM, ERP, marketing platforms, and external data sources</p>
+
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem;">💾 Data Storage & Architecture</h4>
+                <p><strong>SQL Server:</strong> Business data warehouse with columnstore indexes and partitioning<br>
+                <strong>Azure SQL Database:</strong> Cloud data storage with automatic scaling and backup<br>
+                <strong>Azure Data Lake:</strong> Big data storage for structured and unstructured data<br>
+                <strong>Redis Cache:</strong> High-performance caching for real-time dashboards and API responses</p>
+
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem;">⚡ Real-time Analytics & Streaming</h4>
+                <p><strong>Azure Stream Analytics:</strong> Real-time data processing from IoT devices and applications<br>
+                <strong>SignalR:</strong> WebSocket connections for live dashboard updates<br>
+                <strong>Azure Event Hubs:</strong> High-throughput data ingestion for streaming scenarios<br>
+                <strong>Power BI Streaming Datasets:</strong> Real-time tile updates with automatic refresh</p>
+
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem;">🔒 Security & Governance</h4>
+                <p><strong>Azure Active Directory:</strong> Single sign-on with multi-factor authentication<br>
+                <strong>Row-level Security:</strong> Data access control at the user and role level<br>
+                <strong>Data Classification:</strong> Sensitivity labels and data loss prevention policies<br>
+                <strong>Audit Logging:</strong> Comprehensive tracking of user access and data modifications</p>
+
+                <h4 style="color: #f59e0b; margin: 2rem 0 1rem;">📱 Deployment & DevOps</h4>
+                <p><strong>Azure DevOps:</strong> CI/CD pipelines for automated deployment of reports and dashboards<br>
+                <strong>Git Version Control:</strong> Source control for Power BI reports, Tableau workbooks, and custom code<br>
+                <strong>Environment Management:</strong> Development, staging, and production environments<br>
+                <strong>Monitoring:</strong> Application Insights for performance monitoring and error tracking</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Element -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let revenueChart, channelChart;
+        let realtimeInterval;
+        let isRealtimeRunning = false;
+
+        // Initialize charts
+        function initCharts() {
+            // Revenue Trend Chart
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                revenueChart = new Chart(revenueCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Revenue ($M)',
+                            data: [1.8, 2.1, 1.9, 2.4, 2.7, 2.3, 2.8, 2.6, 2.9, 3.1, 2.8, 3.2],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3
+                        }, {
+                            label: 'Target ($M)',
+                            data: [2.0, 2.2, 2.1, 2.5, 2.8, 2.4, 2.9, 2.7, 3.0, 3.2, 2.9, 3.3],
+                            borderColor: '#d97706',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#1e293b' }
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(148, 163, 184, 0.2)' }
+                            },
+                            y: { 
+                                ticks: { color: '#64748b' },
+                                grid: { color: 'rgba(148, 163, 184, 0.2)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Channel Chart
+            const channelCtx = document.getElementById('channelChart');
+            if (channelCtx) {
+                channelChart = new Chart(channelCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Direct', 'Organic Search', 'Paid Ads', 'Social Media', 'Email', 'Referral'],
+                        datasets: [{
+                            data: [28, 25, 18, 12, 10, 7],
+                            backgroundColor: [
+                                '#f59e0b',
+                                '#d97706',
+                                '#fb923c',
+                                '#fdba74',
+                                '#fed7aa',
+                                '#fef3e2'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#f8fafc'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { 
+                                    color: '#1e293b',
+                                    padding: 15,
+                                    fontSize: 12
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Demo tab switching - updated to handle both button and tab clicks
+        function showDemo(tabId) {
+            // Hide all demo content
+            document.querySelectorAll('.demo-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content and tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Find and activate the corresponding tab
+            const tabs = document.querySelectorAll('.demo-tab');
+            tabs.forEach(tab => {
+                if (tab.textContent.includes('Executive Dashboard') && tabId === 'dashboard') {
+                    tab.classList.add('active');
+                } else if (tab.textContent.includes('Power BI') && tabId === 'powerbi') {
+                    tab.classList.add('active');
+                } else if (tab.textContent.includes('Tableau') && tabId === 'tableau') {
+                    tab.classList.add('active');
+                } else if (tab.textContent.includes('Real-time') && tabId === 'realtime') {
+                    tab.classList.add('active');
+                } else if (tab.textContent.includes('Reports') && tabId === 'reports') {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // If event exists (tab clicked), also activate that tab
+            if (typeof event !== 'undefined' && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            // Initialize charts if dashboard tab is selected
+            if (tabId === 'dashboard' && !revenueChart) {
+                setTimeout(initCharts, 100);
+            }
+        }
+
+        // Function for the hero button
+        function exploreliveDashboards() {
+            // Scroll to demo section
+            document.querySelector('.demo-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // Show the dashboard tab
+            showDemo('dashboard');
+            
+            // Show notification
+            showNotification('📊 Live dashboards loaded - explore interactive analytics and KPIs');
+        }
+
+        // Dashboard functions
+        function refreshDashboard() {
+            showNotification('📊 Dashboard data refreshed with latest KPIs and metrics');
+            
+            // Simulate data refresh
+            const kpiValues = document.querySelectorAll('.kpi-value');
+            kpiValues.forEach(value => {
+                if (value.textContent.includes('$')) {
+                    const current = parseFloat(value.textContent.replace(/[$,M]/g, ''));
+                    const newValue = (current * (0.95 + Math.random() * 0.1)).toFixed(1);
+                    value.textContent = '$' + newValue + 'M';
+                } else if (value.textContent.includes('%')) {
+                    const current = parseFloat(value.textContent.replace('%', ''));
+                    const newValue = (current + (Math.random() - 0.5) * 5).toFixed(1);
+                    value.textContent = newValue + '%';
+                } else if (!isNaN(parseInt(value.textContent.replace(',', '')))) {
+                    const current = parseInt(value.textContent.replace(',', ''));
+                    const newValue = Math.floor(current * (0.9 + Math.random() * 0.2));
+                    value.textContent = newValue.toLocaleString();
+                }
+            });
+        }
+
+        function exportDashboard() {
+            showNotification('📊 Dashboard exported to PDF - Executive_KPI_Dashboard_Q4_2024.pdf');
+        }
+
+        function scheduleDashboard() {
+            showNotification('⏰ Dashboard scheduled for daily delivery at 7:00 AM');
+        }
+
+        // Power BI functions
+        function refreshPowerBI() {
+            showNotification('🔄 Power BI dataset refreshed - SQL Server connection successful');
+        }
+
+        function sharePowerBI() {
+            showNotification('📤 Power BI report shared with selected stakeholders');
+        }
+
+        function exportPowerBI() {
+            showNotification('📋 Power BI report exported to PDF with current filters applied');
+        }
+
+        // Tableau functions
+        function publishTableau() {
+            showNotification('🚀 Tableau workbook published to server - available at /views/customer-analytics');
+        }
+
+        function downloadTableau() {
+            showNotification('💾 Tableau workbook downloaded - CustomerAnalytics_v2.4.twbx');
+        }
+
+        function subscribeTableau() {
+            showNotification('📧 Subscribed to weekly Tableau report delivery every Monday at 9:00 AM');
+        }
+
+        // Real-time functions
+        function toggleRealtime() {
+            const btn = event.target;
+            
+            if (!isRealtimeRunning) {
+                isRealtimeRunning = true;
+                btn.textContent = '⏸️ Stop Real-time Simulation';
+                btn.style.background = '#ef4444';
+                
+                realtimeInterval = setInterval(updateRealtimeMetrics, 2000);
+                showNotification('⚡ Real-time data simulation started - metrics updating every 2 seconds');
+            } else {
+                isRealtimeRunning = false;
+                btn.textContent = '▶️ Start Real-time Simulation';
+                btn.style.background = '';
+                
+                clearInterval(realtimeInterval);
+                showNotification('⏹️ Real-time simulation stopped');
+            }
+        }
+
+        function updateRealtimeMetrics() {
+            const liveOrders = document.getElementById('liveOrders');
+            const activeUsers = document.getElementById('activeUsers');
+            const revenueToday = document.getElementById('revenueToday');
+            const serverLoad = document.getElementById('serverLoad');
+
+            if (liveOrders) {
+                const current = parseInt(liveOrders.textContent.replace(',', ''));
+                liveOrders.textContent = (current + Math.floor(Math.random() * 10) - 5).toLocaleString();
+            }
+
+            if (activeUsers) {
+                const current = parseInt(activeUsers.textContent.replace(',', ''));
+                activeUsers.textContent = (current + Math.floor(Math.random() * 100) - 50).toLocaleString();
+            }
+
+            if (revenueToday) {
+                const current = parseInt(revenueToday.textContent.replace(/[$,]/g, ''));
+                revenueToday.textContent = '$' + (current + Math.floor(Math.random() * 1000) - 500).toLocaleString();
+            }
+
+            if (serverLoad) {
+                const current = parseInt(serverLoad.textContent.replace('%', ''));
+                const newLoad = Math.max(30, Math.min(95, current + Math.floor(Math.random() * 20) - 10));
+                serverLoad.textContent = newLoad + '%';
+            }
+        }
+
+        function configureAlerts() {
+            showNotification('🔔 Alert configuration panel opened - customize thresholds and notification methods');
+        }
+
+        // Reports functions
+        function generateAdHocReport() {
+            showNotification('📊 Generating custom analytics report - will be available in 3-5 minutes');
+        }
+
+        function manageSubscriptions() {
+            showNotification('⚙️ Report subscription management panel opened');
+        }
+
+        function viewReportHistory() {
+            showNotification('📋 Report delivery history displayed - last 30 days of automated reports');
+        }
+
+        // Tech modal functions
+        function showTechModal() {
+            document.getElementById('techModal').style.display = 'block';
+        }
+
+        function closeTechModal() {
+            document.getElementById('techModal').style.display = 'none';
+        }
+
+        // Contact form handling
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('contactSubmitBtn');
+            const form = event.target;
+            
+            // Disable submit button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = '📊 Sending Consultation Request...';
+            
+            // Get form data
+            const formData = new FormData(form);
+            const inquiryData = Object.fromEntries(formData);
+            
+            // Simulate API call
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'block';
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📊 Request Analytics Consultation';
+                
+                showNotification('✅ Analytics consultation request submitted successfully!');
+                
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 8000);
+            }, 2000);
+        }
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('techModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize charts when dashboard tab becomes active
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts with a delay to ensure DOM is ready
+            setTimeout(() => {
+                if (document.getElementById('revenueChart')) {
+                    initCharts();
+                }
+            }, 500);
+        });
+
+        // Cleanup intervals when page unloads
+        window.addEventListener('beforeunload', function() {
+            if (realtimeInterval) {
+                clearInterval(realtimeInterval);
+            }
+        });
+    </script>
+</body>
+</html>
