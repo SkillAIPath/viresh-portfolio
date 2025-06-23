@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Data Platform | Technical Capability Demonstration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1419;
+            color: #e1e8ed;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Disclaimer Banner */
+        .disclaimer {
+            background: #2d3748;
+            border-left: 4px solid #4299e1;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .disclaimer-text {
+            font-size: 0.9rem;
+            color: #cbd5e0;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1f29;
+            border-bottom: 1px solid #2d3748;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4299e1;
+        }
+
+        .capability-badge {
+            background: #2d3748;
+            color: #4299e1;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #4299e1;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #1a1f29 0%, #0f1419 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f7fafc;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.2rem;
+            color: #4299e1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-box {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #68d391;
+        }
+
+        .use-case-title {
+            color: #68d391;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-meta {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            color: #a0aec0;
+        }
+
+        .meta-value {
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        /* Capabilities */
+        .capabilities {
+            padding: 3rem 0;
+            background: #1a1f29;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+        }
+
+        .capability-card {
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .capability-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4299e1;
+            display: block;
+        }
+
+        .capability-label {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #f7fafc;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-button.active {
+            background: #4299e1;
+            color: #f7fafc;
+            border-color: #4299e1;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Updated Cards - Full Width Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .card {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+            height: 100%;
+        }
+
+        .card h3 {
+            color: #f7fafc;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            color: #a0aec0;
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #4299e1;
+            color: #f7fafc;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #3182ce;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #4299e1;
+            color: #4299e1;
+        }
+
+        .btn-secondary:hover {
+            background: #4299e1;
+            color: #f7fafc;
+        }
+
+        /* Architecture */
+        .architecture-diagram {
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            background: #1a1f29;
+            border: 1px solid #4299e1;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4299e1;
+            font-size: 1.2rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-detail {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-category {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .tech-category h4 {
+            color: #4299e1;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: #2d3748;
+            color: #cbd5e0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Qualification Form */
+        .qualification {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            color: #e1e8ed;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Downloads */
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .download-card {
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .download-title {
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .download-description {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1f29;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* PDF Viewer */
+        .pdf-viewer {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #2d3748;
+            border-radius: 6px;
+            background: #f7fafc;
+        }
+
+        /* Architecture Diagram Improvements */
+        .architecture-visual {
+            background: #0f1419;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .architecture-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 900px;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .flow-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .flow-title {
+            color: #4299e1;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .flow-component {
+            background: #1a1f29;
+            border: 2px solid #4299e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 120px;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .component-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .component-label {
+            color: #f7fafc;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .data-layers {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .data-layer {
+            background: #1a1f29;
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .bronze-layer {
+            border-color: #d69e2e;
+            background: rgba(214, 158, 46, 0.1);
+        }
+
+        .silver-layer {
+            border-color: #9ca3af;
+            background: rgba(156, 163, 175, 0.1);
+        }
+
+        .gold-layer {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .layer-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-desc {
+            font-size: 0.7rem;
+            color: #a0aec0;
+        }
+
+        .flow-arrow {
+            color: #4299e1;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .pipeline-flow {
+                flex-direction: column;
+            }
+            
+            .pipeline-step::after {
+                display: none;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .architecture-flow {
+                flex-direction: column;
+                min-width: auto;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .data-layers {
+                flex-direction: column;
+            }
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: #2d3748;
+            border-left: 4px solid #f6ad55;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-text {
+            color: #f6ad55;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="project-title">Customer Data Platform</div>
+                <div class="capability-badge">Technical Capability Demo</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="disclaimer">
+            <div class="disclaimer-text">
+                <strong>Note:</strong> This is a technical capability demonstration showing the type of solution I can build for your business. 
+                All data shown is simulated for privacy and demonstration purposes. Real client projects remain confidential under NDAs.
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>Customer Data Platform</h1>
+                    <div class="subtitle">Azure Databricks • Delta Lake • Real-time Analytics</div>
+                    <p>
+                        A comprehensive data engineering solution that unifies customer data from multiple touchpoints 
+                        into a single source of truth. This demonstration shows the technical architecture and capabilities 
+                        I can deliver for retail, e-commerce, or any customer-centric business.
+                    </p>
+                    
+                    <div class="use-case-box">
+                        <div class="use-case-title">Common Business Scenario</div>
+                        <p style="margin-bottom: 0;">
+                            Customer data scattered across POS systems, e-commerce platforms, CRM, email marketing tools, 
+                            and support systems. Manual reporting processes, incomplete customer profiles, and limited 
+                            real-time insights hampering business decisions.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="showTab('overview'); document.getElementById('demos').scrollIntoView();">Explore Solution</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('qualification').scrollIntoView();">Discuss Your Project</button>
+                    </div>
+                </div>
+                
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Solution Type</span>
+                        <span class="meta-value">Data Lakehouse</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Architecture</span>
+                        <span class="meta-value">Medallion (Bronze/Silver/Gold)</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Processing</span>
+                        <span class="meta-value">Real-time + Batch</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Typical Data Volume</span>
+                        <span class="meta-value">100GB - 10TB daily</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Implementation</span>
+                        <span class="meta-value">3-8 months</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Deployment</span>
+                        <span class="meta-value">Cloud-native Azure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="capabilities">
+        <div class="container">
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <span class="capability-number">3-15</span>
+                    <div class="capability-label">Data Sources Integration</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">50GB-1TB</span>
+                    <div class="capability-label">Daily Processing Range</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">Real-time</span>
+                    <div class="capability-label">Streaming Analytics</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">60-85%</span>
+                    <div class="capability-label">Typical Time Savings</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">95%+</span>
+                    <div class="capability-label">Data Quality Achievement</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Architecture</h2>
+            <div class="architecture-diagram">
+                <div class="pipeline-flow">
+                    <div class="pipeline-step">
+                        <div class="step-title">Data Sources</div>
+                        <div class="step-detail">CRM, POS, Web, Mobile, APIs</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Ingestion</div>
+                        <div class="step-detail">Event Hubs, Data Factory</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Bronze Layer</div>
+                        <div class="step-detail">Raw Data Storage</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Silver Layer</div>
+                        <div class="step-detail">Cleaned & Validated</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Gold Layer</div>
+                        <div class="step-detail">Business-Ready Data</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Consumption</div>
+                        <div class="step-detail">Dashboards, APIs, ML</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>Data Platform</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Azure Databricks</span>
+                        <span class="tech-tag">Delta Lake</span>
+                        <span class="tech-tag">Azure Data Lake Gen2</span>
+                        <span class="tech-tag">Event Hubs</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>Processing & Transformation</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Apache Spark</span>
+                        <span class="tech-tag">PySpark</span>
+                        <span class="tech-tag">SQL</span>
+                        <span class="tech-tag">Azure Data Factory</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>Analytics & Visualization</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">REST APIs</span>
+                        <span class="tech-tag">Azure Functions</span>
+                        <span class="tech-tag">Synapse Analytics</span>
+                    </div>
+                </div>
+                <div class="tech-category">
+                    <h4>DevOps & Governance</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Azure DevOps</span>
+                        <span class="tech-tag">Terraform</span>
+                        <span class="tech-tag">Azure Monitor</span>
+                        <span class="tech-tag">Unity Catalog</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demos" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Demonstrations</h2>
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('overview')">Solution Overview</button>
+                    <button class="tab-button" onclick="showTab('pipeline')">Data Pipeline</button>
+                    <button class="tab-button" onclick="showTab('analytics')">Analytics Demo</button>
+                </div>
+                
+                <div id="overview" class="tab-content active">
+                    <h3 style="margin-bottom: 2rem; color: #f7fafc;">Solution Overview</h3>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Technical Architecture & Approach</h3>
+                            <p>
+                                Modern data lakehouse architecture using Azure Databricks and Delta Lake. 
+                                Implements medallion pattern (Bronze → Silver → Gold) for data quality and governance. 
+                                Supports both real-time streaming and batch processing patterns with automated data quality checks, 
+                                self-service analytics, and scalable cloud infrastructure.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Business Impact & ROI</h3>
+                            <p>
+                                Eliminates data silos and manual processes while enabling 360° customer view and real-time reporting. 
+                                Typical clients experience 60-85% reduction in reporting time, improved decision-making speed, 
+                                enhanced customer insights, and a scalable foundation for AI/ML initiatives that drives measurable business growth.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Key Platform Features</h3>
+                            <p>
+                                Comprehensive data platform featuring automated data quality validation, real-time customer scoring, 
+                                self-service business intelligence, RESTful API endpoints for applications, built-in compliance frameworks 
+                                (GDPR ready), advanced analytics capabilities, and enterprise-grade security with scalable cloud infrastructure.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Implementation & Delivery</h3>
+                            <p>
+                                Agile implementation methodology with incremental value delivery and infrastructure-as-code approach. 
+                                Includes comprehensive technical documentation, team training programs, ongoing support options, 
+                                full source code access, deployment automation scripts, and knowledge transfer to ensure long-term success.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin: 2rem 0 1rem 0; color: #f7fafc;">Customer Analytics Dashboard</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Interactive demonstration of real-time customer analytics capabilities. 
+                        Shows typical KPIs and insights available through the platform.
+                    </p>
+                    <div class="demo-grid">
+                        <div>
+                            <h4 style="color: #4299e1; margin-bottom: 1rem;">Customer Activity Trends</h4>
+                            <div class="chart-container">
+                                <canvas id="customersChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="color: #4299e1; margin-bottom: 1rem;">Revenue Distribution</h4>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="refreshCharts()">Simulate Data Refresh</button>
+                        <button class="btn btn-secondary" onclick="exportSampleData()">Download Sample Report</button>
+                    </div>
+                </div>
+
+                <div id="pipeline" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Data Pipeline Health Monitor</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Real-time monitoring capabilities showing data flow health, processing rates, and system status.
+                    </p>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3 style="color: #68d391;">Bronze Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Processing Rate: Variable based on source volume<br>
+                            Data Quality: Raw ingestion with schema validation<br>
+                            Latency: Near real-time (< 5 minutes)</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Silver Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Data Cleansing: Automated validation rules<br>
+                            Deduplication: Identity resolution algorithms<br>
+                            Quality Score: Configurable thresholds</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Gold Layer Status</h3>
+                            <p>✅ Operational<br>
+                            Business Logic: Customer 360° aggregations<br>
+                            Update Frequency: Configurable (real-time to hourly)<br>
+                            API Availability: 99%+ uptime SLA</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #68d391;">Consumption Layer</h3>
+                            <p>✅ Operational<br>
+                            Dashboard Response: Sub-second queries<br>
+                            API Performance: Typically < 200ms<br>
+                            Concurrent Users: Scales automatically</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analytics" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Customer Profile Analytics</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Demonstration of unified customer view capabilities with sample data patterns.
+                    </p>
+                    <div style="margin-bottom: 1.5rem;">
+                        <button class="btn" onclick="loadSampleProfile()">Generate Sample Customer Profile</button>
+                    </div>
+                    <div id="customerProfile" style="background: #0f1419; padding: 1.5rem; border-radius: 8px; border: 1px solid #2d3748;">
+                        <p style="color: #a0aec0; text-align: center;">Click "Generate Sample Customer Profile" to see unified customer data view</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="qualification" class="section">
+        <div class="container">
+            <h2 class="section-title">Project Discussion</h2>
+            <div class="highlight-box">
+                <div class="highlight-text">Interested in a similar solution for your business?</div>
+                <p style="margin-bottom: 0; color: #a0aec0;">
+                    Let's discuss your specific requirements, data sources, and business objectives. 
+                    This helps me propose the right technical approach and provide accurate timeline and cost estimates.
+                </p>
+            </div>
+            
+            <form class="qualification" onsubmit="handleQualification(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company/Organization</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry/Business Type</label>
+                        <select class="form-select" required>
+                            <option value="">Select Industry</option>
+                            <option value="retail">Retail/E-commerce</option>
+                            <option value="finance">Financial Services</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="technology">Technology</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Approximate Data Volume (daily)</label>
+                        <select class="form-select" required>
+                            <option value="">Select Volume</option>
+                            <option value="small">< 10GB</option>
+                            <option value="medium">10GB - 1TB</option>
+                            <option value="large">1TB - 10TB</option>
+                            <option value="enterprise">10TB+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Number of Data Sources</label>
+                        <select class="form-select" required>
+                            <option value="">Select Range</option>
+                            <option value="few">2-5 sources</option>
+                            <option value="several">6-10 sources</option>
+                            <option value="many">11-20 sources</option>
+                            <option value="complex">20+ sources</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Current Data Challenges & Requirements</label>
+                    <textarea class="form-textarea" placeholder="Describe your current data situation, main pain points, and what you're looking to achieve..." required></textarea>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Project Timeline</label>
+                        <select class="form-select" required>
+                            <option value="">Select Timeline</option>
+                            <option value="urgent">ASAP (1-2 months)</option>
+                            <option value="soon">3-6 months</option>
+                            <option value="planned">6-12 months</option>
+                            <option value="exploring">Just exploring</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Range (USD)</label>
+                        <select class="form-select" required>
+                            <option value="">Select Range</option>
+                            <option value="small">$10K - $50K</option>
+                            <option value="medium">$50K - $150K</option>
+                            <option value="large">$150K - $500K</option>
+                            <option value="enterprise">$500K+</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">
+                    Submit Project Inquiry
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section id="resources" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Documentation</h2>
+            <p class="section-subtitle">
+                Comprehensive documentation and implementation guides for building similar data platforms.
+            </p>
+            <div class="downloads-grid">
+                <div class="download-card">
+                    <div class="download-title">Solution Overview</div>
+                    <div class="download-description">
+                        Technical overview document outlining the customer data platform 
+                        architecture, key features, and implementation approach.
+                    </div>
+                    <button class="btn" onclick="downloadSolutionOverview()">Download Overview</button>
+                </div>
+                <div class="download-card">
+                    <div class="download-title">Architecture Diagram</div>
+                    <div class="download-description">
+                        High-level system architecture diagram showing data flow, 
+                        processing layers, and integration patterns.
+                    </div>
+                    <button class="btn" onclick="downloadArchitectureDiagram()">Download Diagram</button>
+                </div>
+                <div class="download-card">
+                    <div class="download-title">Sample Data Report</div>
+                    <div class="download-description">
+                        Example analytics report with sample customer insights, 
+                        KPIs, and dashboard visualizations.
+                    </div>
+                    <button class="btn" onclick="downloadSampleReport()">Download Report</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Tab functionality
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Charts
+        let customersChart, revenueChart;
+
+        function initCharts() {
+            // Customer Activity Chart
+            const customersCtx = document.getElementById('customersChart').getContext('2d');
+            customersChart = new Chart(customersCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Active Customers (Sample Data)',
+                        data: [12500, 13200, 12800, 14100, 13700, 14500],
+                        borderColor: '#4299e1',
+                        backgroundColor: 'rgba(66, 153, 225, 0.1)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#a0aec0' },
+                            grid: { color: '#2d3748' }
+                        },
+                        y: { 
+                            ticks: { color: '#a0aec0' },
+                            grid: { color: '#2d3748' }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Online Store', 'Physical Stores', 'Mobile App', 'Partners'],
+                    datasets: [{
+                        data: [42, 31, 18, 9],
+                        backgroundColor: ['#4299e1', '#68d391', '#f6ad55', '#9f7aea'],
+                        borderWidth: 2,
+                        borderColor: '#1a1f29'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e1e8ed' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshCharts() {
+            const btn = event.target;
+            btn.textContent = 'Refreshing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // Update with new sample data
+                customersChart.data.datasets[0].data = [
+                    12500 + Math.floor(Math.random() * 2000) - 1000,
+                    13200 + Math.floor(Math.random() * 2000) - 1000,
+                    12800 + Math.floor(Math.random() * 2000) - 1000,
+                    14100 + Math.floor(Math.random() * 2000) - 1000,
+                    13700 + Math.floor(Math.random() * 2000) - 1000,
+                    14500 + Math.floor(Math.random() * 2000) - 1000
+                ];
+                customersChart.update();
+                
+                // Update revenue chart
+                const total = 100;
+                const online = 35 + Math.floor(Math.random() * 20);
+                const physical = 25 + Math.floor(Math.random() * 15);
+                const mobile = 15 + Math.floor(Math.random() * 15);
+                const partners = total - online - physical - mobile;
+                
+                revenueChart.data.datasets[0].data = [online, physical, mobile, partners];
+                revenueChart.update();
+                
+                btn.textContent = 'Simulate Data Refresh';
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        function exportSampleData() {
+            const csvContent = "Metric,Value\nActive Customers,14500\nRevenue Growth,12.3%\nCustomer Satisfaction,4.2/5\nData Quality Score,98.7%";
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sample_analytics_report.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function loadSampleProfile() {
+            const profiles = [
+                {
+                    id: 'DEMO_001',
+                    name: 'Sample Customer A',
+                    tier: 'Gold',
+                    totalSpent: '$3,240',
+                    lastActivity: '2 days ago',
+                    preferredChannel: 'Mobile App',
+                    segment: 'High-Value Regular'
+                },
+                {
+                    id: 'DEMO_002',
+                    name: 'Sample Customer B',
+                    tier: 'Silver',
+                    totalSpent: '$1,890',
+                    lastActivity: '1 week ago',
+                    preferredChannel: 'Online Store',
+                    segment: 'Seasonal Shopper'
+                },
+                {
+                    id: 'DEMO_003',
+                    name: 'Sample Customer C',
+                    tier: 'Platinum',
+                    totalSpent: '$7,560',
+                    lastActivity: '1 day ago',
+                    preferredChannel: 'Physical Store',
+                    segment: 'VIP Customer'
+                }
+            ];
+            
+            const profile = profiles[Math.floor(Math.random() * profiles.length)];
+            
+            document.getElementById('customerProfile').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Customer Overview</h4>
+                        <p><strong>ID:</strong> ${profile.id}</p>
+                        <p><strong>Name:</strong> ${profile.name}</p>
+                        <p><strong>Tier:</strong> ${profile.tier}</p>
+                        <p><strong>Segment:</strong> ${profile.segment}</p>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 1rem;">
+                            <em>* Sample data for demonstration</em>
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Engagement Metrics</h4>
+                        <p><strong>Total Spent:</strong> ${profile.totalSpent}</p>
+                        <p><strong>Last Activity:</strong> ${profile.lastActivity}</p>
+                        <p><strong>Preferred Channel:</strong> ${profile.preferredChannel}</p>
+                        <p><strong>Status:</strong> <span style="color: #68d391;">Active</span></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleQualification(event) {
+            event.preventDefault();
+            
+            // Show next steps modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); z-index: 10000; display: flex;
+                align-items: center; justify-content: center; padding: 2rem;
+            `;
+            modal.innerHTML = `
+                <div style="background: #1a1f29; padding: 3rem; border-radius: 15px; max-width: 600px; border: 1px solid #2d3748;">
+                    <h3 style="color: #4299e1; margin-bottom: 1.5rem; text-align: center;">Thank You for Your Interest!</h3>
+                    <p style="color: #e1e8ed; margin-bottom: 2rem; line-height: 1.6;">
+                        Your project inquiry has been received. Here's what happens next:
+                    </p>
+                    <div style="background: #0f1419; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid #2d3748;">
+                        <h4 style="color: #4299e1; margin-bottom: 1rem;">Next Steps:</h4>
+                        <ul style="color: #a0aec0; line-height: 1.8; padding-left: 1.5rem;">
+                            <li><strong>24 hours:</strong> Initial response with technical assessment</li>
+                            <li><strong>3-5 days:</strong> Detailed proposal with architecture recommendations</li>
+                            <li><strong>1-2 weeks:</strong> Discovery call to discuss your specific requirements</li>
+                            <li><strong>2-3 weeks:</strong> Finalized project plan and timeline</li>
+                        </ul>
+                    </div>
+                    <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2rem;">
+                        I'll personally review your requirements and provide a comprehensive response 
+                        with technical approach, realistic timeline, and investment details.
+                    </p>
+                    <div style="text-align: center;">
+                        <button onclick="document.body.removeChild(this.parentElement.parentElement)" 
+                                style="background: #4299e1; color: #f7fafc; padding: 1rem 2rem; border: none; border-radius: 25px; cursor: pointer; font-weight: 600;">
+                            Perfect, Looking Forward to Your Response
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Download functions that actually work
+        function downloadSolutionOverview() {
+            const content = `Customer Data Platform - Solution Overview
+
+Architecture: Modern Lakehouse with Azure Databricks
+Processing: Real-time + Batch data processing
+Data Sources: 3-12 typical enterprise systems
+Volume: 50GB-1TB daily processing capacity
+Timeline: 3-8 months typical implementation
+
+Key Features:
+- Unified customer 360° view
+- Real-time analytics and reporting
+- Self-service business intelligence
+- Automated data quality checks
+- Compliance and governance frameworks
+
+Technology Stack:
+- Azure Databricks & Delta Lake
+- Azure Data Factory for orchestration
+- Power BI for analytics and reporting
+- Azure Event Hubs for real-time streaming
+- MLOps for advanced analytics
+
+Business Impact:
+- 60-85% reduction in reporting time
+- Improved data quality and consistency
+- Enhanced customer insights and analytics
+- Scalable foundation for AI/ML initiatives
+
+For detailed technical specifications and implementation planning,
+please contact for more information.`;
+            
+            downloadTextFile('Customer_Data_Platform_Overview.txt', content);
+        }
+
+        function downloadArchitectureDiagram() {
+            // Create an improved architecture diagram based on the reference image
+            const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: bold 20px sans-serif; fill: #2d3748; }
+      .section-title { font: bold 16px sans-serif; fill: #4299e1; }
+      .component-title { font: bold 14px sans-serif; fill: #1a1f29; }
+      .component-text { font: 12px sans-serif; fill: #4a5568; }
+      .layer-label { font: bold 12px sans-serif; fill: #1a1f29; }
+      .source-box { fill: #e6fffa; stroke: #38b2ac; stroke-width: 2; }
+      .ingestion-box { fill: #fef5e7; stroke: #ed8936; stroke-width: 2; }
+      .bronze-box { fill: #fef5e7; stroke: #d69e2e; stroke-width: 2; }
+      .silver-box { fill: #f7fafc; stroke: #9ca3af; stroke-width: 2; }
+      .gold-box { fill: #fef5e7; stroke: #f59e0b; stroke-width: 2; }
+      .process-box { fill: #ebf8ff; stroke: #4299e1; stroke-width: 2; }
+      .consume-box { fill: #f0fff4; stroke: #48bb78; stroke-width: 2; }
+      .arrow { stroke: #4299e1; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .data-flow { stroke: #38b2ac; stroke-width: 2; fill: none; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#4299e1" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" class="title">Customer Data Platform - Medallion Architecture</text>
+  
+  <!-- Ingest Section -->
+  <text x="100" y="60" text-anchor="middle" class="section-title">Ingest</text>
+  
+  <!-- Data Sources -->
+  <rect x="20" y="80" width="80" height="60" class="source-box" rx="8"/>
+  <text x="60" y="105" text-anchor="middle" class="component-title">CRM Systems</text>
+  <text x="60" y="120" text-anchor="middle" class="component-text">Salesforce, HubSpot</text>
+  
+  <rect x="20" y="160" width="80" height="60" class="source-box" rx="8"/>
+  <text x="60" y="185" text-anchor="middle" class="component-title">E-commerce</text>
+  <text x="60" y="200" text-anchor="middle" class="component-text">Shopify, Magento</text>
+  
+  <rect x="20" y="240" width="80" height="60" class="source-box" rx="8"/>
+  <text x="60" y="265" text-anchor="middle" class="component-title">POS/Retail</text>
+  <text x="60" y="280" text-anchor="middle" class="component-text">Square, Toast</text>
+  
+  <rect x="20" y="320" width="80" height="60" class="source-box" rx="8"/>
+  <text x="60" y="345" text-anchor="middle" class="component-title">Marketing</text>
+  <text x="60" y="360" text-anchor="middle" class="component-text">Email, Social</text>
+  
+  <rect x="20" y="400" width="80" height="60" class="source-box" rx="8"/>
+  <text x="60" y="425" text-anchor="middle" class="component-title">Support</text>
+  <text x="60" y="440" text-anchor="middle" class="component-text">Zendesk, Jira</text>
+  
+  <!-- Ingestion Layer -->
+  <rect x="150" y="200" width="100" height="120" class="ingestion-box" rx="8"/>
+  <text x="200" y="220" text-anchor="middle" class="component-title">Azure Data</text>
+  <text x="200" y="235" text-anchor="middle" class="component-title">Factory</text>
+  <text x="200" y="255" text-anchor="middle" class="component-text">ETL/ELT Pipelines</text>
+  <text x="200" y="270" text-anchor="middle" class="component-text">Event Hubs</text>
+  <text x="200" y="285" text-anchor="middle" class="component-text">Real-time Streaming</text>
+  <text x="200" y="300" text-anchor="middle" class="component-text">Batch Processing</text>
+  
+  <!-- Process Section -->
+  <text x="600" y="60" text-anchor="middle" class="section-title">Process</text>
+  
+  <!-- Apache Spark / Databricks -->
+  <rect x="500" y="80" width="120" height="80" class="process-box" rx="8"/>
+  <text x="560" y="105" text-anchor="middle" class="component-title">Apache Spark</text>
+  <text x="560" y="125" text-anchor="middle" class="component-text">Distributed Processing</text>
+  <text x="560" y="140" text-anchor="middle" class="component-text">PySpark, Scala, SQL</text>
+  
+  <rect x="650" y="80" width="120" height="80" class="process-box" rx="8"/>
+  <text x="710" y="105" text-anchor="middle" class="component-title">Azure</text>
+  <text x="710" y="120" text-anchor="middle" class="component-title">Databricks</text>
+  <text x="710" y="140" text-anchor="middle" class="component-text">Collaborative Analytics</text>
+  <text x="710" y="155" text-anchor="middle" class="component-text">MLOps Platform</text>
+  
+  <!-- Store Section (Delta Lake Layers) -->
+  <text x="600" y="210" text-anchor="middle" class="section-title">Store</text>
+  
+  <!-- Bronze Layer -->
+  <rect x="350" y="240" width="120" height="100" class="bronze-box" rx="8"/>
+  <text x="410" y="265" text-anchor="middle" class="component-title">Bronze</text>
+  <text x="410" y="285" text-anchor="middle" class="component-text">Raw Data</text>
+  <text x="410" y="300" text-anchor="middle" class="component-text">Schema on Read</text>
+  <text x="410" y="315" text-anchor="middle" class="component-text">ACID Transactions</text>
+  <text x="410" y="330" text-anchor="middle" class="component-text">Data Lineage</text>
+  
+  <!-- Silver Layer -->
+  <rect x="500" y="240" width="120" height="100" class="silver-box" rx="8"/>
+  <text x="560" y="265" text-anchor="middle" class="component-title">Silver</text>
+  <text x="560" y="285" text-anchor="middle" class="component-text">Cleaned Data</text>
+  <text x="560" y="300" text-anchor="middle" class="component-text">Validated &amp; Standardized</text>
+  <text x="560" y="315" text-anchor="middle" class="component-text">Deduplication</text>
+  <text x="560" y="330" text-anchor="middle" class="component-text">Quality Checks</text>
+  
+  <!-- Gold Layer -->
+  <rect x="650" y="240" width="120" height="100" class="gold-box" rx="8"/>
+  <text x="710" y="265" text-anchor="middle" class="component-title">Gold</text>
+  <text x="710" y="285" text-anchor="middle" class="component-text">Business Ready</text>
+  <text x="710" y="300" text-anchor="middle" class="component-text">Aggregated Views</text>
+  <text x="710" y="315" text-anchor="middle" class="component-text">Customer 360°</text>
+  <text x="710" y="330" text-anchor="middle" class="component-text">Analytics Optimized</text>
+  
+  <!-- Delta Lake Labels -->
+  <rect x="320" y="360" width="480" height="40" fill="rgba(66, 153, 225, 0.1)" stroke="#4299e1" stroke-width="1" rx="5"/>
+  <text x="560" y="380" text-anchor="middle" class="section-title">Azure Data Lake Gen2 + Delta Lake</text>
+  <text x="560" y="395" text-anchor="middle" class="component-text">ACID Transactions • Time Travel • Schema Evolution • Unified Batch &amp; Streaming</text>
+  
+  <!-- Consumption -->
+  <rect x="900" y="200" width="120" height="80" class="consume-box" rx="8"/>
+  <text x="960" y="225" text-anchor="middle" class="component-title">Power BI</text>
+  <text x="960" y="245" text-anchor="middle" class="component-text">Dashboards</text>
+  <text x="960" y="260" text-anchor="middle" class="component-text">Self-Service BI</text>
+  
+  <rect x="900" y="300" width="120" height="80" class="consume-box" rx="8"/>
+  <text x="960" y="325" text-anchor="middle" class="component-title">REST APIs</text>
+  <text x="960" y="345" text-anchor="middle" class="component-text">Applications</text>
+  <text x="960" y="360" text-anchor="middle" class="component-text">Real-time Serving</text>
+  
+  <rect x="900" y="400" width="120" height="80" class="consume-box" rx="8"/>
+  <text x="960" y="425" text-anchor="middle" class="component-title">ML Models</text>
+  <text x="960" y="445" text-anchor="middle" class="component-text">Predictions</text>
+  <text x="960" y="460" text-anchor="middle" class="component-text">Feature Store</text>
+  
+  <!-- Arrows showing data flow -->
+  <line x1="100" y1="200" x2="150" y2="220" class="arrow"/>
+  <line x1="100" y1="260" x2="150" y2="250" class="arrow"/>
+  <line x1="100" y1="320" x2="150" y2="280" class="arrow"/>
+  
+  <line x1="250" y1="260" x2="350" y2="280" class="arrow"/>
+  
+  <line x1="470" y1="290" x2="500" y2="290" class="arrow"/>
+  <line x1="620" y1="290" x2="650" y2="290" class="arrow"/>
+  
+  <line x1="560" y1="160" x2="560" y2="240" class="arrow"/>
+  <line x1="710" y1="160" x2="710" y2="240" class="arrow"/>
+  
+  <line x1="770" y1="280" x2="900" y2="240" class="arrow"/>
+  <line x1="770" y1="300" x2="900" y2="340" class="arrow"/>
+  <line x1="770" y1="320" x2="900" y2="440" class="arrow"/>
+  
+  <!-- Governance Layer -->
+  <rect x="50" y="520" width="1100" height="40" fill="rgba(139, 92, 246, 0.1)" stroke="#8b5cf6" stroke-width="2" rx="5"/>
+  <text x="600" y="540" text-anchor="middle" class="section-title">Data Governance &amp; Security Layer</text>
+  <text x="200" y="555" text-anchor="middle" class="component-text">Unity Catalog</text>
+  <text x="400" y="555" text-anchor="middle" class="component-text">RBAC &amp; Access Control</text>
+  <text x="600" y="555" text-anchor="middle" class="component-text">Data Lineage &amp; Audit</text>
+  <text x="800" y="555" text-anchor="middle" class="component-text">GDPR Compliance</text>
+  <text x="1000" y="555" text-anchor="middle" class="component-text">Encryption at Rest &amp; Transit</text>
+</svg>`;
+            
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Customer_Data_Platform_Architecture_Improved.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function downloadSampleReport() {
+            const csvContent = `Customer Analytics Report - Sample Data
+
+Metric,Value,Period,Notes
+Total Customers,125000,Q4 2024,Active customer base
+New Customers,2800,December 2024,Monthly acquisition
+Customer Retention Rate,87%,Q4 2024,Quarterly retention
+Average Order Value,$142.50,Q4 2024,Quarterly average
+Top Customer Segment,Premium (35%),Q4 2024,By revenue contribution
+Data Quality Score,96.2%,Latest,Automated monitoring
+Report Generation Time,8 minutes,Latest,Automated process
+Cost per Report,$12.50,Latest,Operational cost
+
+Channel Performance:
+Online Store,42%,Revenue share
+Physical Stores,35%,Revenue share
+Mobile App,18%,Revenue share
+Marketplace,5%,Revenue share
+
+Regional Distribution:
+North America,45%,Customer base
+Europe,30%,Customer base
+Asia Pacific,20%,Customer base
+Other,5%,Customer base
+
+Note: This is sample data for demonstration purposes.
+Real implementation would include client-specific KPIs and metrics.`;
+            
+            downloadTextFile('Sample_Customer_Analytics_Report.csv', csvContent);
+        }
+
+        function downloadTextFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', function() {
+            setTimeout(initCharts, 100);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('[style*="position: fixed"]');
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
