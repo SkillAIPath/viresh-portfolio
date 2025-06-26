@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N8N Business Workflow Automation Portfolio | Technical Capabilities</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --primary-purple: #8b5cf6;
+            --primary-blue: #3b82f6;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e2e8f0;
+            --accent-cyan: #06b6d4;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-purple);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: var(--primary-purple);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-dark), var(--primary-purple));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary-purple);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-item {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Capabilities Section */
+        .capabilities-section {
+            padding: 6rem 0;
+            background: var(--bg-white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-blue), var(--accent-cyan));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-purple);
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .capability-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .capability-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .capability-features {
+            list-style: none;
+        }
+
+        .capability-features li {
+            padding: 0.5rem 0;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .capability-features li::before {
+            content: '▶';
+            color: var(--primary-purple);
+            font-size: 0.8rem;
+        }
+
+        /* Implementation Examples */
+        .portfolio-section {
+            padding: 6rem 0;
+            background: var(--bg-light);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .portfolio-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .portfolio-header {
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            color: white;
+            padding: 2rem;
+        }
+
+        .portfolio-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-category {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-body {
+            padding: 2rem;
+        }
+
+        .portfolio-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: var(--primary-purple);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .portfolio-features {
+            list-style: none;
+        }
+
+        .portfolio-features li {
+            padding: 0.3rem 0;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-features li::before {
+            content: '✓';
+            color: var(--success-green);
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Technical Architecture */
+        .architecture-section {
+            padding: 6rem 0;
+            background: var(--bg-white);
+        }
+
+        .architecture-diagram {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-white));
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .workflow-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .workflow-step {
+            background: var(--bg-white);
+            border: 2px solid var(--border-light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            border-color: var(--primary-purple);
+            transform: scale(1.05);
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-purple);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-detail {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Code Example */
+        .code-section {
+            padding: 6rem 0;
+            background: var(--bg-light);
+        }
+
+        .code-container {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .code-block {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            padding: 6rem 0;
+            background: var(--bg-white);
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-form {
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            padding: 0.75rem;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--bg-light);
+            padding: 3rem 0 2rem;
+            text-align: center;
+        }
+
+        /* Enhanced Mobile Responsive Design */
+        @media (max-width: 1024px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero-title {
+                font-size: clamp(1.8rem, 8vw, 2.5rem);
+                line-height: 1.2;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.8rem, 6vw, 2.5rem);
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .capability-card {
+                padding: 1.5rem;
+            }
+
+            .capability-title {
+                font-size: 1.2rem;
+            }
+
+            .capability-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-header {
+                padding: 1.5rem;
+            }
+
+            .portfolio-body {
+                padding: 1.5rem;
+            }
+
+            .portfolio-title {
+                font-size: 1.3rem;
+            }
+
+            .workflow-steps {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .workflow-step {
+                min-width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .workflow-step::after {
+                content: '↓';
+                right: 50%;
+                bottom: -20px;
+                top: auto;
+                transform: translateX(50%);
+            }
+
+            .workflow-step:last-child::after {
+                display: none;
+            }
+
+            .architecture-diagram {
+                padding: 2rem 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .code-container {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .capabilities-section,
+            .portfolio-section,
+            .architecture-section,
+            .code-section,
+            .contact-section {
+                padding: 4rem 0;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-badge {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item {
+                padding: 0.8rem;
+            }
+
+            .capability-card {
+                padding: 1rem;
+            }
+
+            .portfolio-header {
+                padding: 1rem;
+            }
+
+            .portfolio-body {
+                padding: 1rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem 1rem;
+            }
+
+            .form-input, .form-textarea, .form-select {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            .submit-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .workflow-step {
+                padding: 1rem;
+            }
+
+            .architecture-diagram {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .submit-btn,
+            .capability-card,
+            .portfolio-card,
+            .stat-item {
+                min-height: 44px;
+            }
+
+            .capability-card:hover,
+            .portfolio-card:hover,
+            .stat-item:hover {
+                transform: none;
+            }
+
+            .workflow-step:hover {
+                transform: none;
+                border-color: var(--border-light);
+            }
+        }
+
+        /* Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">N8N Automation</div>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#capabilities" class="nav-link">Capabilities</a></li>
+                    <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                    <li><a href="#architecture" class="nav-link">Technical</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content fade-in-up">
+            <div class="hero-badge">
+                ⚡ Technical Portfolio • N8N Business Automation
+            </div>
+            <h1 class="hero-title">N8N Business Workflow Automation</h1>
+            <p class="hero-subtitle">Visual Workflow Builder • Business Process Automation</p>
+            <p class="hero-description">
+                Professional N8N automation development combining visual workflow design with business process optimization. 
+                Specializing in intelligent business automation, multi-system integration, and scalable workflow solutions.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Workflows Developed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">App Integrations</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label">Industries Served</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Monitoring & Support</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="capabilities" class="capabilities-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Core Technical Capabilities</h2>
+                <p class="section-subtitle">
+                    Comprehensive N8N development services from simple automations to complex business systems.
+                </p>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <div class="capability-icon">🔗</div>
+                    <h3 class="capability-title">System Integration</h3>
+                    <p class="capability-description">
+                        Connect disparate business systems and applications through N8N's extensive library of 
+                        pre-built connectors and custom HTTP nodes for seamless data flow.
+                    </p>
+                    <ul class="capability-features">
+                        <li>CRM and ERP integrations</li>
+                        <li>Communication platform connectors</li>
+                        <li>Database and storage connections</li>
+                        <li>Custom API integrations</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">📱</div>
+                    <h3 class="capability-title">Communication Automation</h3>
+                    <p class="capability-description">
+                        Automate communications across multiple channels including Slack, Teams, email, and SMS. 
+                        Create intelligent notification systems and collaborative workflow triggers.
+                    </p>
+                    <ul class="capability-features">
+                        <li>Slack bot development and integration</li>
+                        <li>Email automation with dynamic templating</li>
+                        <li>SMS and notification management</li>
+                        <li>Team collaboration workflow triggers</li>
+                        <li>Multi-channel message routing</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">⚙️</div>
+                    <h3 class="capability-title">Process Optimization</h3>
+                    <p class="capability-description">
+                        Design and implement complex business workflows with conditional logic, loops, and error handling. 
+                        N8N's visual editor makes automation accessible while maintaining enterprise-grade functionality.
+                    </p>
+                    <ul class="capability-features">
+                        <li>Visual workflow design and optimization</li>
+                        <li>Conditional branching and decision trees</li>
+                        <li>Error handling and retry mechanisms</li>
+                        <li>Scheduled and event-triggered execution</li>
+                        <li>Performance monitoring and analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Portfolio Examples</h2>
+                <p class="section-subtitle">
+                    Real N8N implementations showcasing various automation patterns and business integrations.
+                </p>
+            </div>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-card">
+                    <div class="portfolio-header">
+                        <div class="portfolio-icon">📬</div>
+                        <h3 class="portfolio-title">Lead Notification System</h3>
+                        <p class="portfolio-category">Marketing • Sales Automation</p>
+                    </div>
+                    <div class="portfolio-body">
+                        <p class="portfolio-description">
+                            Automated workflow that monitors form submissions, qualifies leads based on predefined criteria, 
+                            and sends formatted notifications to sales teams via Slack with relevant contact information and lead scoring.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">N8N Workflow Engine</span>
+                            <span class="tech-tag">Slack API</span>
+                            <span class="tech-tag">HubSpot CRM</span>
+                            <span class="tech-tag">Webhook Integration</span>
+                        </div>
+                        <ul class="portfolio-features">
+                            <li>Automated lead scoring with criteria analysis</li>
+                            <li>Real-time Slack notifications with lead context</li>
+                            <li>CRM integration for seamless data flow</li>
+                            <li>Customizable scoring criteria and thresholds</li>
+                            <li>Detailed logging and performance tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="portfolio-card">
+                    <div class="portfolio-header">
+                        <div class="portfolio-icon">💬</div>
+                        <h3 class="portfolio-title">Customer Support Automation</h3>
+                        <p class="portfolio-category">Support • Customer Service</p>
+                    </div>
+                    <div class="portfolio-body">
+                        <p class="portfolio-description">
+                            Slack-based support system that handles customer inquiries, accesses knowledge bases, 
+                            and escalates complex issues to human agents. Built with N8N's visual workflow designer.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">N8N Processing Nodes</span>
+                            <span class="tech-tag">Slack Bot Framework</span>
+                            <span class="tech-tag">Database Integration</span>
+                            <span class="tech-tag">Document Processing</span>
+                            <span class="tech-tag">Zendesk API</span>
+                        </div>
+                        <ul class="portfolio-features">
+                            <li>Automated response and routing system</li>
+                            <li>Knowledge base integration with search</li>
+                            <li>Intelligent escalation workflows</li>
+                            <li>Multi-language support capabilities</li>
+                            <li>Performance analytics and tracking</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="portfolio-card">
+                    <div class="portfolio-header">
+                        <div class="portfolio-icon">🔄</div>
+                        <h3 class="portfolio-title">Multi-Platform Content Sync</h3>
+                        <p class="portfolio-category">Marketing • Content Management</p>
+                    </div>
+                    <div class="portfolio-body">
+                        <p class="portfolio-description">
+                            Content distribution system that automatically publishes and syncs content across multiple platforms 
+                            with platform-specific optimization and scheduling capabilities.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">N8N HTTP Nodes</span>
+                            <span class="tech-tag">Social Media APIs</span>
+                            <span class="tech-tag">Content Management</span>
+                            <span class="tech-tag">Image Processing</span>
+                            <span class="tech-tag">Analytics Tracking</span>
+                        </div>
+                        <ul class="portfolio-features">
+                            <li>Multi-platform content optimization</li>
+                            <li>Automated scheduling and publishing</li>
+                            <li>Image and media processing workflows</li>
+                            <li>Engagement tracking and analytics</li>
+                            <li>Content approval and moderation flows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="architecture-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Technical Architecture</h2>
+                <p class="section-subtitle">
+                    N8N workflow development process and deployment architecture for scalable automation solutions.
+                </p>
+            </div>
+
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">N8N Development Workflow</h3>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <span class="step-icon">📋</span>
+                        <div class="step-title">Requirements Analysis</div>
+                        <div class="step-detail">Process mapping & integration planning</div>
+                    </div>
+                    <div class="workflow-step">
+                        <span class="step-icon">🎨</span>
+                        <div class="step-title">Workflow Design</div>
+                        <div class="step-detail">Visual workflow creation & testing</div>
+                    </div>
+                    <div class="workflow-step">
+                        <span class="step-icon">🔗</span>
+                        <div class="step-title">Integration Setup</div>
+                        <div class="step-detail">API connections & data mapping</div>
+                    </div>
+                    <div class="workflow-step">
+                        <span class="step-icon">⚡</span>
+                        <div class="step-title">Deployment</div>
+                        <div class="step-detail">Production deployment & monitoring</div>
+                    </div>
+                    <div class="workflow-step">
+                        <span class="step-icon">📊</span>
+                        <div class="step-title">Optimization</div>
+                        <div class="step-detail">Performance tuning & enhancements</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="code-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">N8N Workflow Example</h2>
+                <p class="section-subtitle">
+                    Sample N8N workflow configuration showing lead processing integration with Slack and CRM systems.
+                </p>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>🔧</span>
+                    <div class="code-title">Lead Qualification Workflow - N8N Configuration</div>
+                </div>
+                <div class="code-block">
+{
+  "nodes": [
+    {
+      "name": "Slack Trigger",
+      "type": "n8n-nodes-base.slackTrigger",
+      "parameters": {
+        "event": "app_mention",
+        "channel": "#leads"
+      }
+    },
+    {
+      "name": "Extract Lead Data",
+      "type": "n8n-nodes-base.function",
+      "parameters": {
+        "functionCode": `
+          const message = $input.first().json;
+          const leadData = {
+            timestamp: message.ts,
+            text: message.text,
+            user: message.user
+          };
+          
+          // Extract email and company using regex
+          const emailMatch = leadData.text.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+          const companyMatch = leadData.text.match(/company:\\s*([^\\n]+)/i);
+          
+          return {
+            json: {
+              ...leadData,
+              email: emailMatch ? emailMatch[1] : null,
+              company: companyMatch ? companyMatch[1].trim() : null
+            }
+          };
+        `
+      }
+    },
+    {
+      "name": "Process Lead Scoring",
+      "type": "n8n-nodes-base.function",
+      "parameters": {
+        "functionCode": `
+          const leadData = $input.first().json;
+          let score = 0;
+          
+          // Basic scoring logic
+          if (leadData.email && leadData.email.includes('.com')) score += 30;
+          if (leadData.company) score += 40;
+          if (leadData.text.toLowerCase().includes('enterprise')) score += 30;
+          
+          return {
+            json: {
+              ...leadData,
+              score: score,
+              qualified: score >= 60
+            }
+          };
+        `
+      }
+    },
+    {
+      "name": "Update CRM",
+      "type": "n8n-nodes-base.hubspot",
+      "parameters": {
+        "resource": "contact",
+        "operation": "upsert",
+        "email": "={{ $('Extract Lead Data').item.json.email }}"
+      }
+    },
+    {
+      "name": "Notify Sales Team",
+      "type": "n8n-nodes-base.slack",
+      "parameters": {
+        "operation": "postMessage",
+        "channel": "#sales-alerts",
+        "text": "📬 New qualified lead scored: {{ $('Process Lead Scoring').item.json.score }}/100"
+      }
+    }
+  ],
+  "connections": {
+    "Slack Trigger": {
+      "main": [["Extract Lead Data"]]
+    },
+    "Extract Lead Data": {
+      "main": [["Process Lead Scoring", "Update CRM"]]
+    },
+    "Process Lead Scoring": {
+      "main": [["Notify Sales Team"]]
+    }
+  }
+}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-container">
+                <h2 class="section-title">Technical Consultation</h2>
+                <p class="section-subtitle">
+                    Discuss your automation requirements and explore N8N implementation possibilities for your business.
+                </p>
+                
+                <form class="contact-form" onsubmit="handleFormSubmit(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-input" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company</label>
+                            <input type="text" class="form-input" name="company" required>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Project Type</label>
+                            <select class="form-select" name="projectType" required>
+                                <option value="">Select Project Type</option>
+                                <option value="business-automation">Business Automation</option>
+                                <option value="workflow-optimization">Workflow Optimization</option>
+                                <option value="system-integration">System Integration</option>
+                                <option value="process-optimization">Process Optimization</option>
+                                <option value="consultation">Technical Consultation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project Description</label>
+                        <textarea class="form-textarea" name="description" placeholder="Describe your automation requirements, current processes, and technical objectives..." required></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Timeline</label>
+                            <select class="form-select" name="timeline" required>
+                                <option value="">Select Timeline</option>
+                                <option value="immediate">Immediate (1-2 weeks)</option>
+                                <option value="short-term">Short-term (1-2 months)</option>
+                                <option value="medium-term">Medium-term (3-6 months)</option>
+                                <option value="planning">Planning phase</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Budget Range</label>
+                            <select class="form-select" name="budget" required>
+                                <option value="">Select Budget Range</option>
+                                <option value="small">$2K - $10K</option>
+                                <option value="medium">$10K - $25K</option>
+                                <option value="large">$25K - $50K</option>
+                                <option value="enterprise">$50K+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        Submit Technical Inquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 N8N Business Automation Portfolio. Specializing in workflow automation and business process optimization.</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+                Professional N8N development services • Custom automation solutions • Technical consultation
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Here you would typically send data to your backend
+            console.log('Form submission:', data);
+            
+            // Show success message
+            alert('Thank you for your inquiry! I will review your technical requirements and respond within 24 hours.');
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animations
+        document.querySelectorAll('.capability-card, .portfolio-card, .workflow-step').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

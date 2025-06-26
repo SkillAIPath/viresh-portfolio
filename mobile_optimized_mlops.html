@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps Platform | Technical Capability Demonstration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a3e 0%, #2d1b69 50%, #4c1d95 100%);
+            color: #e1e8ed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Disclaimer Banner */
+        .disclaimer {
+            background: #2d3748;
+            border-left: 4px solid #7c3aed;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .disclaimer-text {
+            font-size: 0.9rem;
+            color: #cbd5e0;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(30, 30, 70, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .platform-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #7c3aed, #c084fc);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .title-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.2rem;
+        }
+
+        .title-text .subtitle {
+            font-size: 0.9rem;
+            color: #c4b5fd;
+        }
+
+        .capability-badge {
+            background: #2d3748;
+            color: #7c3aed;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #7c3aed;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 3rem 0;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(192, 132, 252, 0.1));
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f7fafc;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.2rem;
+            color: #7c3aed;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+        }
+
+        .use-case-box {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #c084fc;
+        }
+
+        .use-case-title {
+            color: #c084fc;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-meta {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+        }
+
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            color: #a0aec0;
+        }
+
+        .meta-value {
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        /* Capabilities */
+        .capabilities {
+            padding: 3rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+        }
+
+        .capability-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+        }
+
+        .capability-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7c3aed;
+            display: block;
+        }
+
+        .capability-label {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #f7fafc;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 6px;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-button.active {
+            background: #7c3aed;
+            color: #f7fafc;
+            border-color: #7c3aed;
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+        }
+
+        .card h3 {
+            color: #f7fafc;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: #a0aec0;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            line-height: 1.7;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #7c3aed;
+            color: #f7fafc;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-height: 48px;
+            min-width: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #7c3aed;
+            color: #7c3aed;
+        }
+
+        .btn-secondary:hover {
+            background: #7c3aed;
+            color: #f7fafc;
+        }
+
+        /* Architecture */
+        .architecture-diagram {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pipeline-step {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid #7c3aed;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+            flex: 1;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7c3aed;
+            font-size: 1.2rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-detail {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .tech-category {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .tech-category h4 {
+            color: #7c3aed;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(124, 58, 237, 0.2);
+            color: #c4b5fd;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        /* Demo Dashboard */
+        .demo-dashboard {
+            padding: 2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+        }
+
+        .metric-card:nth-child(1) { --accent-color: #10b981; }
+        .metric-card:nth-child(2) { --accent-color: #7c3aed; }
+        .metric-card:nth-child(3) { --accent-color: #c084fc; }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: #a1a1aa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-icon {
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #10b981;
+        }
+
+        /* Qualification Form */
+        .qualification {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #f7fafc;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 6px;
+            color: #e1e8ed;
+            font-size: 0.9rem;
+            min-height: 48px;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Downloads */
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .download-card {
+            background: rgba(30, 30, 70, 0.8);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+        }
+
+        .download-title {
+            color: #f7fafc;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .download-description {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.2);
+            border-left: 4px solid #c084fc;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-text {
+            color: #c084fc;
+            font-weight: 600;
+        }
+
+        /* Demo Status Indicators */
+        .demo-status {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(124, 58, 237, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            font-size: 0.85rem;
+        }
+
+        .demo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #c084fc;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 70, 0.95);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobile Touch Targets */
+        @media (max-width: 768px) {
+            .btn,
+            .tab-button,
+            .close-btn,
+            .form-input,
+            .form-select,
+            .form-textarea {
+                min-height: 48px;
+                min-width: 48px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .tech-tag {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-grid,
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .platform-title {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .title-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content .subtitle {
+                font-size: 1rem;
+            }
+            
+            .capabilities {
+                padding: 2rem 0;
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .capability-card {
+                padding: 1rem;
+            }
+            
+            .capability-number {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 2rem 0;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .tab-buttons {
+                gap: 0.5rem;
+            }
+            
+            .tab-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .tab-content {
+                padding: 1.5rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+                min-height: auto;
+            }
+            
+            .pipeline-flow {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .pipeline-step {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .pipeline-step::after {
+                display: none;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .metric-card {
+                padding: 1rem;
+            }
+            
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            .qualification {
+                padding: 1.5rem;
+            }
+            
+            .demo-status {
+                justify-content: center;
+            }
+            
+            .demo-indicator {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .disclaimer {
+                margin: 1rem 0.5rem;
+                padding: 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .platform-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .title-text h1 {
+                font-size: 1.3rem;
+            }
+            
+            .capability-badge {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .tab-content {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .architecture-diagram {
+                padding: 1rem;
+            }
+            
+            .tech-category {
+                padding: 1rem;
+            }
+            
+            .qualification {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .use-case-box {
+                padding: 1rem;
+            }
+            
+            .hero-meta {
+                padding: 1rem;
+            }
+            
+            .capability-number {
+                font-size: 1.6rem;
+            }
+            
+            .capability-label {
+                font-size: 0.8rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .tab-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+            
+            .metric-card {
+                padding: 0.8rem;
+            }
+            
+            .metric-value {
+                font-size: 1.8rem;
+            }
+            
+            .pipeline-step {
+                padding: 0.8rem;
+            }
+            
+            .step-title {
+                font-size: 0.9rem;
+            }
+            
+            .step-detail {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Landscape mobile optimization */
+        @media (max-width: 968px) and (orientation: landscape) {
+            .hero {
+                padding: 1.5rem 0;
+            }
+            
+            .capabilities {
+                padding: 1.5rem 0;
+            }
+            
+            .section {
+                padding: 1.5rem 0;
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="platform-title">
+                    <div class="platform-icon">🤖</div>
+                    <div class="title-text">
+                        <h1>MLOps Platform Solution</h1>
+                        <div class="subtitle">Enterprise ML Operations • Model Lifecycle Management</div>
+                    </div>
+                </div>
+                <div class="capability-badge">Technical Capability Demo</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="disclaimer">
+            <div class="disclaimer-text">
+                <strong>Note:</strong> This is a technical capability demonstration showing the type of MLOps solution I can build for your organization. 
+                All metrics shown are conceptual for demonstration purposes. Real client projects remain confidential under NDAs.
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>MLOps Platform Solution</h1>
+                    <div class="subtitle">Azure ML • Kubernetes • CI/CD • Model Monitoring</div>
+                    <p>
+                        A comprehensive MLOps platform that automates the complete machine learning lifecycle 
+                        from development to production. This demonstration shows the technical architecture and capabilities 
+                        I can deliver for organizations scaling their ML operations.
+                    </p>
+                    
+                    <div class="use-case-box">
+                        <div class="use-case-title">Common Business Challenge</div>
+                        <p style="margin-bottom: 0;">
+                            Data science teams work in isolation, manual model deployments, lack of model monitoring, 
+                            inconsistent environments, and no standardized ML governance process. Models fail silently 
+                            in production without proper monitoring and rollback mechanisms.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="showTab('overview'); document.getElementById('demos').scrollIntoView();">Explore Solution</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('qualification').scrollIntoView();">Discuss Your MLOps Needs</button>
+                    </div>
+                </div>
+                
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Solution Type</span>
+                        <span class="meta-value">End-to-End MLOps</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Architecture</span>
+                        <span class="meta-value">Cloud-Native Microservices</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Deployment</span>
+                        <span class="meta-value">Container Orchestration</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Model Capacity</span>
+                        <span class="meta-value">100+ Concurrent Models</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Implementation</span>
+                        <span class="meta-value">4-12 months</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Cloud Platform</span>
+                        <span class="meta-value">Azure/AWS/GCP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="capabilities">
+        <div class="container">
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <span class="capability-number">5-50</span>
+                    <div class="capability-label">ML Models Support</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">Auto</span>
+                    <div class="capability-label">CI/CD Pipeline</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">Real-time</span>
+                    <div class="capability-label">Model Monitoring</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">70-90%</span>
+                    <div class="capability-label">Deployment Time Reduction</div>
+                </div>
+                <div class="capability-card">
+                    <span class="capability-number">99%+</span>
+                    <div class="capability-label">Platform Availability</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Dashboard with Concept Data -->
+    <section class="demo-dashboard">
+        <div class="container">
+            <h2 class="section-title">MLOps Capability Dashboard</h2>
+            <div class="demo-status">
+                <div class="demo-indicator">
+                    <div class="demo-dot"></div>
+                    <span>Demo Environment</span>
+                </div>
+                <div class="demo-indicator">
+                    <div class="demo-dot"></div>
+                    <span>Conceptual Data</span>
+                </div>
+                <div class="demo-indicator">
+                    <div class="demo-dot"></div>
+                    <span>Portfolio Project</span>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Platform Components</div>
+                        <div class="metric-icon">🔧</div>
+                    </div>
+                    <div class="metric-value">5+</div>
+                    <div class="metric-change">
+                        <span>Integrated Services</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Automation Level</div>
+                        <div class="metric-icon">⚡</div>
+                    </div>
+                    <div class="metric-value">95%</div>
+                    <div class="metric-change">
+                        <span>Process Automation</span>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Platform Maturity</div>
+                        <div class="metric-icon">📊</div>
+                    </div>
+                    <div class="metric-value">L4</div>
+                    <div class="metric-change">
+                        <span>MLOps Maturity Level</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Architecture</h2>
+            <div class="architecture-diagram">
+                <div class="pipeline-flow">
+                    <div class="pipeline-step">
+                        <div class="step-title">Data Sources</div>
+                        <div class="step-detail">Feature Stores, APIs</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Development</div>
+                        <div class="step-detail">Jupyter, MLflow</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Training</div>
+                        <div class="step-detail">Distributed Computing</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Validation</div>
+                        <div class="step-detail">Model Testing</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Deployment</div>
+                        <div class="step-detail">Container Orchestration</div>
+                    </div>
+                    <div class="pipeline-step">
+                        <div class="step-title">Monitoring</div>
+                        <div class="step-detail">Performance Tracking</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>🔗 ML Frameworks</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Scikit-learn</span>
+                        <span class="tech-tag">XGBoost</span>
+                        <span class="tech-tag">MLflow</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>☁️ Cloud Platforms</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Azure ML</span>
+                        <span class="tech-tag">Azure Databricks</span>
+                        <span class="tech-tag">AWS SageMaker</span>
+                        <span class="tech-tag">GCP Vertex AI</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>🔧 Orchestration</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Docker</span>
+                        <span class="tech-tag">Kubeflow</span>
+                        <span class="tech-tag">Apache Airflow</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>📊 Monitoring</h4>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Prometheus</span>
+                        <span class="tech-tag">Grafana</span>
+                        <span class="tech-tag">Azure Monitor</span>
+                        <span class="tech-tag">Custom Dashboards</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demos" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Capabilities</h2>
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('overview')">Solution Overview</button>
+                    <button class="tab-button" onclick="showTab('pipeline')">Pipeline Architecture</button>
+                    <button class="tab-button" onclick="showTab('monitoring')">Monitoring Concepts</button>
+                </div>
+                
+                <div id="overview" class="tab-content active">
+                    <h3 style="margin-bottom: 2rem; color: #f7fafc;">MLOps Solution Overview</h3>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Technical Approach</h3>
+                            <p>
+                                Modern cloud-native MLOps platform using container orchestration and microservices architecture. 
+                                Implements GitOps principles for model versioning and deployment. Supports multiple ML frameworks 
+                                with automatic scaling and resource optimization. Infrastructure-as-code approach ensures 
+                                reproducible and reliable deployments across environments.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Business Impact</h3>
+                            <p>
+                                Accelerates model deployment cycles from weeks to days. Reduces manual intervention 
+                                and human errors in ML workflows. Enables data science teams to focus on model development 
+                                rather than infrastructure management. Provides governance and compliance frameworks 
+                                for enterprise ML initiatives with audit trails and rollback capabilities.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Key Features</h3>
+                            <p>
+                                Automated CI/CD for ML models, real-time monitoring and alerting, A/B testing framework, 
+                                multi-environment deployment support, model versioning and rollback, feature store integration, 
+                                and comprehensive logging. Includes data drift detection, model performance tracking,
+                                and automated retraining pipelines for production stability.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Implementation Method</h3>
+                            <p>
+                                Iterative delivery with MVP in 4-6 weeks, followed by incremental feature releases. 
+                                Infrastructure-as-code deployment with comprehensive documentation and team training. 
+                                Includes knowledge transfer sessions, operational runbooks, and ongoing support options. 
+                                Established monitoring and alerting from day one for operational excellence.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin: 2rem 0 1rem 0; color: #f7fafc;">MLOps Metrics Visualization</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Conceptual demonstration of typical MLOps monitoring and performance metrics dashboards.
+                    </p>
+                    <div class="demo-grid">
+                        <div>
+                            <h4 style="color: #7c3aed; margin-bottom: 1rem;">Model Performance Trends (Concept)</h4>
+                            <div class="chart-container">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="color: #7c3aed; margin-bottom: 1rem;">Deployment Pipeline Health (Concept)</h4>
+                            <div class="chart-container">
+                                <canvas id="pipelineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <button class="btn" onclick="refreshDemoCharts()">Simulate Monitoring Refresh</button>
+                        <button class="btn btn-secondary" onclick="exportConceptualReport()">Download Concept Report</button>
+                    </div>
+                </div>
+
+                <div id="pipeline" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">MLOps Pipeline Architecture</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Technical architecture showing automated ML pipeline stages and integration points.
+                    </p>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3 style="color: #c084fc;">Development Environment</h3>
+                            <p>📊 Status: Operational<br>
+                            Jupyter Notebooks with MLflow integration<br>
+                            Git-based version control for experiments<br>
+                            Automated environment provisioning<br>
+                            Resource: Scalable compute clusters</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #c084fc;">Training Pipeline</h3>
+                            <p>⚙️ Status: Automated<br>
+                            Distributed training capabilities<br>
+                            Hyperparameter optimization<br>
+                            Model validation and testing<br>
+                            Integration: Feature store and data pipelines</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #c084fc;">Deployment Stage</h3>
+                            <p>⚙️ Status: Containerized<br>
+                            Blue-green deployment strategy<br>
+                            A/B testing framework<br>
+                            Canary releases with automatic rollback<br>
+                            Environment: Multi-cloud ready</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="color: #c084fc;">Monitoring & Governance</h3>
+                            <p>📈 Status: Real-time<br>
+                            Model drift detection algorithms<br>
+                            Performance degradation alerts<br>
+                            Compliance and audit logging<br>
+                            Integration: Enterprise monitoring systems</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="monitoring" class="tab-content">
+                    <h3 style="margin-bottom: 1rem; color: #f7fafc;">Model Monitoring Concepts</h3>
+                    <p style="color: #a0aec0; margin-bottom: 2rem;">
+                        Demonstration of monitoring frameworks and alerting mechanisms for production ML systems.
+                    </p>
+                    <div style="margin-bottom: 1.5rem;">
+                        <button class="btn" onclick="loadConceptualMonitoring()">Generate Monitoring Example</button>
+                    </div>
+                    <div id="monitoringExample" style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(147, 51, 234, 0.3);">
+                        <p style="color: #a0aec0; text-align: center;">Click "Generate Monitoring Example" to see conceptual monitoring dashboard</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="qualification" class="section">
+        <div class="container">
+            <h2 class="section-title">MLOps Project Discussion</h2>
+            <div class="highlight-box">
+                <div class="highlight-text">Ready to implement MLOps for your organization?</div>
+                <p style="margin-bottom: 0; color: #a0aec0;">
+                    Let's discuss your current ML challenges, team structure, and technology requirements 
+                    to design the right MLOps solution for your business objectives.
+                </p>
+            </div>
+            
+            <form class="qualification" onsubmit="handleMLOpsQualification(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company/Organization</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry/Business Type</label>
+                        <select class="form-select" required>
+                            <option value="">Select Industry</option>
+                            <option value="technology">Technology</option>
+                            <option value="finance">Financial Services</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="retail">Retail/E-commerce</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Current ML Stage</label>
+                        <select class="form-select" required>
+                            <option value="">Select Stage</option>
+                            <option value="research">Research & Experimentation</option>
+                            <option value="prototyping">Prototyping & Development</option>
+                            <option value="pilot">Pilot Deployments</option>
+                            <option value="production">Production ML Models</option>
+                            <option value="scaling">Scaling ML Operations</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Team Size</label>
+                        <select class="form-select" required>
+                            <option value="">Select Team Size</option>
+                            <option value="small">1-5 Data Scientists</option>
+                            <option value="medium">6-15 ML Engineers</option>
+                            <option value="large">16-50 ML Professionals</option>
+                            <option value="enterprise">50+ ML Team Members</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Current MLOps Challenges & Requirements</label>
+                    <textarea class="form-textarea" placeholder="Describe your current ML deployment challenges, infrastructure needs, and specific MLOps requirements..." required></textarea>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Project Timeline</label>
+                        <select class="form-select" required>
+                            <option value="">Select Timeline</option>
+                            <option value="urgent">Immediate (1-3 months)</option>
+                            <option value="soon">Short-term (3-6 months)</option>
+                            <option value="planned">Medium-term (6-12 months)</option>
+                            <option value="exploring">Long-term planning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Range (USD)</label>
+                        <select class="form-select" required>
+                            <option value="">Select Range</option>
+                            <option value="small">$25K - $100K</option>
+                            <option value="medium">$100K - $300K</option>
+                            <option value="large">$300K - $750K</option>
+                            <option value="enterprise">$750K+</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">
+                    Submit MLOps Project Inquiry
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Tab functionality
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Charts with conceptual data
+        let performanceChart, pipelineChart;
+
+        function initDemoCharts() {
+            // Performance Chart with conceptual metrics
+            const performanceCtx = document.getElementById('performanceChart');
+            if (performanceCtx) {
+                performanceChart = new Chart(performanceCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                        datasets: [{
+                            label: 'Model Accuracy (Conceptual)',
+                            data: [92.5, 93.1, 92.8, 94.2, 93.9, 94.5],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3
+                        }, {
+                            label: 'System Performance (Conceptual)',
+                            data: [89.2, 90.1, 91.5, 90.8, 92.3, 91.9],
+                            borderColor: '#7c3aed',
+                            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#e1e8ed' }
+                            }
+                        },
+                        scales: {
+                            x: { 
+                                ticks: { color: '#a0aec0' },
+                                grid: { color: 'rgba(124, 58, 237, 0.2)' }
+                            },
+                            y: { 
+                                ticks: { color: '#a0aec0' },
+                                grid: { color: 'rgba(124, 58, 237, 0.2)' },
+                                min: 85,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Pipeline Health Chart with conceptual data
+            const pipelineCtx = document.getElementById('pipelineChart');
+            if (pipelineCtx) {
+                pipelineChart = new Chart(pipelineCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Successful Deployments', 'Testing Phase', 'Manual Review', 'Failed'],
+                        datasets: [{
+                            data: [78, 15, 5, 2],
+                            backgroundColor: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'],
+                            borderWidth: 2,
+                            borderColor: 'rgba(30, 30, 70, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#e1e8ed' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function refreshDemoCharts() {
+            const btn = event.target;
+            btn.textContent = 'Refreshing Concepts...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // Update with new conceptual data
+                if (performanceChart) {
+                    performanceChart.data.datasets[0].data = [
+                        92.5 + Math.random() * 3 - 1.5,
+                        93.1 + Math.random() * 3 - 1.5,
+                        92.8 + Math.random() * 3 - 1.5,
+                        94.2 + Math.random() * 3 - 1.5,
+                        93.9 + Math.random() * 3 - 1.5,
+                        94.5 + Math.random() * 3 - 1.5
+                    ];
+                    performanceChart.data.datasets[1].data = [
+                        89.2 + Math.random() * 4 - 2,
+                        90.1 + Math.random() * 4 - 2,
+                        91.5 + Math.random() * 4 - 2,
+                        90.8 + Math.random() * 4 - 2,
+                        92.3 + Math.random() * 4 - 2,
+                        91.9 + Math.random() * 4 - 2
+                    ];
+                    performanceChart.update();
+                }
+                
+                // Update pipeline chart
+                if (pipelineChart) {
+                    const successful = 75 + Math.floor(Math.random() * 10);
+                    const testing = 12 + Math.floor(Math.random() * 8);
+                    const review = 3 + Math.floor(Math.random() * 5);
+                    const failed = 100 - successful - testing - review;
+                    
+                    pipelineChart.data.datasets[0].data = [successful, testing, review, failed];
+                    pipelineChart.update();
+                }
+                
+                btn.textContent = 'Simulate Monitoring Refresh';
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        function exportConceptualReport() {
+            const csvContent = "MLOps Concept Report\n\nMetric,Value,Notes\nPlatform Components,5+,Integrated Services\nAutomation Level,95%,Process Automation\nMLOps Maturity,L4,Advanced Level\nDeployment Success,~85%,Conceptual Metric\nMonitoring Coverage,Real-time,Comprehensive\n\nNote: This is a conceptual demonstration for portfolio purposes.";
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mlops_concept_report.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function loadConceptualMonitoring() {
+            const examples = [
+                {
+                    component: 'Model Performance Monitor',
+                    status: 'Operational',
+                    metric: 'Accuracy: 94.2%',
+                    alert: 'All thresholds normal',
+                    framework: 'Custom monitoring with Prometheus'
+                },
+                {
+                    component: 'Data Drift Detection',
+                    status: 'Active Monitoring',
+                    metric: 'Drift Score: 0.03',
+                    alert: 'Within acceptable range',
+                    framework: 'Statistical analysis pipeline'
+                },
+                {
+                    component: 'Infrastructure Health',
+                    status: 'Optimal',
+                    metric: 'CPU: 65%, Memory: 72%',
+                    alert: 'Auto-scaling available',
+                    framework: 'Kubernetes & Azure Monitor'
+                }
+            ];
+            
+            const example = examples[Math.floor(Math.random() * examples.length)];
+            
+            document.getElementById('monitoringExample').innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: #7c3aed; margin-bottom: 1rem;">Monitoring Component</h4>
+                        <p><strong>Component:</strong> ${example.component}</p>
+                        <p><strong>Status:</strong> <span style="color: #10b981;">${example.status}</span></p>
+                        <p><strong>Framework:</strong> ${example.framework}</p>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 1rem;">
+                            <em>* Conceptual monitoring example</em>
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: #7c3aed; margin-bottom: 1rem;">Current Metrics</h4>
+                        <p><strong>Primary Metric:</strong> ${example.metric}</p>
+                        <p><strong>Alert Status:</strong> ${example.alert}</p>
+                        <p><strong>Monitoring Type:</strong> Real-time</p>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 1rem;">
+                            <em>* Sample monitoring configuration</em>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleMLOpsQualification(event) {
+            event.preventDefault();
+            
+            // Show MLOps-specific next steps modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.9); z-index: 10000; display: flex;
+                align-items: center; justify-content: center; padding: 2rem;
+            `;
+            modal.innerHTML = `
+                <div style="background: rgba(30, 30, 70, 0.95); padding: 3rem; border-radius: 15px; max-width: 600px; border: 1px solid rgba(147, 51, 234, 0.3);">
+                    <h3 style="color: #7c3aed; margin-bottom: 1.5rem; text-align: center;">Thank You for Your MLOps Interest!</h3>
+                    <p style="color: #e1e8ed; margin-bottom: 2rem; line-height: 1.6;">
+                        Your MLOps project inquiry has been received. Here's the next steps process:
+                    </p>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid rgba(147, 51, 234, 0.3);">
+                        <h4 style="color: #7c3aed; margin-bottom: 1rem;">Implementation Roadmap:</h4>
+                        <ul style="color: #a0aec0; line-height: 1.8; padding-left: 1.5rem;">
+                            <li><strong>24-48 hours:</strong> MLOps assessment and technical response</li>
+                            <li><strong>1 week:</strong> Detailed architecture proposal with cost estimates</li>
+                            <li><strong>2 weeks:</strong> Technical discovery session and requirements validation</li>
+                            <li><strong>3-4 weeks:</strong> Finalized implementation plan and project timeline</li>
+                        </ul>
+                    </div>
+                    <p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2rem;">
+                        I'll personally review your MLOps requirements and provide a comprehensive response 
+                        with technical architecture, realistic timeline, and investment details tailored to your ML maturity level.
+                    </p>
+                    <div style="text-align: center;">
+                        <button onclick="document.body.removeChild(this.parentElement.parentElement); event.target.closest('form').reset();" 
+                                style="background: #7c3aed; color: #f7fafc; padding: 1rem 2rem; border: none; border-radius: 25px; cursor: pointer; font-weight: 600;">
+                            Excellent! Looking Forward to the MLOps Discussion
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Download functions with conceptual content
+        function downloadTextFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', function() {
+            setTimeout(initDemoCharts, 100);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('[style*="position: fixed"]');
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
